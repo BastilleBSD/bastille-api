@@ -1,4 +1,4 @@
-# BastilleBSD API + UI
+# BastilleBSD API Server
 
 ## Commands
 
@@ -12,32 +12,19 @@ Ir also handles all Rocinante commands, except for the `CP` hook.
 
 ## Setup
 
-You can either build and run, or just run the package.
+Run the following command to install the API server.
 
 ```shell
-go build
-./bastille-ui
+make install
+cp /usr/local/etc/bastille-api/config.json.sample /usr/local/etc/bastille-api/config.json
 ```
-or
-```
-go run .
-```
-To run only the API: `go run . --api-only`
-
-To run in debug mode: `go run . --debug`
-
-API config file: `api/config.json`
-
-WebUI config file: `web/config.json`
+Customize the config file to your liking. We recommend only adding API keys
+through the API interface.
 
 Requests made via the API must contain an `Authorization: Bearer API_KEY` header as well
-as an `Authorization-ID: keyid` header. The `API_KEY` can be set inside
-the `api/config.json` file. The `API_KEY` is set every time the program starts.
+as an `Authorization-ID: keyid` header.
 
-For the WebUI, the `web/config.json` file contains a default username and password to
-log in. Simply visit http://host:port to get started.
-
-To use the console on the homepage, you need to `pkg install ttyd`.
+To use the console feature, you need to `pkg install ttyd`.
 
 ## Dependencies
 
