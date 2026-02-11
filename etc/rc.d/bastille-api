@@ -1,0 +1,41 @@
+#!/bin/sh
+#
+# BastilleBSD API Service Script
+#
+# PROVIDE: bastille_api
+# REQUIRE: DAEMON NETWORKING
+# KEYWORD: shutdown
+#
+# Optional settings:
+# bastille_api_enable (YES/NO): Enable or disable the service.
+# bastille_api_port (port):            Service port.
+# bastille_api_config (path):        Path to config file.
+# bastille_api_flags (flags):          --debug for debug mode
+
+
+. /etc/rc.subr
+
+name=bastille_api
+desc="BastilleBSD API Server"
+rcvar=bastille_api_enable
+
+load_rc_config $name
+
+: ${bastille_api_enable:="NO"}
+: ${bastille_api_port:="8888"}
+: ${bastille_api_config:="/usr/local/etc/bastille-api/config.json"}
+: ${bastille_api_flags:=""}
+
+pidfile="/var/run/${name}/${name}.pid"
+command=/usr/sbin/daemon
+command_args="-P ${pidfile} -H -o /var/log/${name}/${name}.log /usr/local/bin/bastille-api --port ${bastille_api_port} --config ${bastille_api_config} ${bastille_api_flags}"
+
+start_precmd=bastille_api_startprecmd
+
+bastille_api_startprecmd()
+{
+    mkdir -p /var/run/${name}
+    mkdir -p /var/log/${name}
+}
+
+run_rc_command "$1"

@@ -1,0 +1,884 @@
+{
+  "software": "bastille",
+  "options": [
+    "Use 'bastille -v|--version' for version information.",
+    "Use 'bastille command -h|--help' for more information about a command.",
+    "Use 'bastille -c|--config FILE command' to specify a non-default config file."
+  ],
+  "help": "bastille [option(s)] command [option(s)] TARGET ARGS",
+  "commands": [
+    {
+      "command": "bootstrap",
+      "description": "Bootstrap a release or template(s).",
+      "options": [{
+        "sflag": "-p",
+        "lflag": "--pkgbase",
+        "text": "Bootstrap using pkgbase (FreeBSD 15.0-RELEASE and above)."
+      },{
+        "sflag": "-u",
+        "lflag": "--update",
+        "text": "Update the release after bootstrap."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "ARCH"],
+      "help": "bastille bootstrap [option(s)] TARGET [ARCH]",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/bootstrap.html"
+    },
+    {
+      "command": "clone",
+      "description": "Clone an existing jail.",
+      "options": [{
+        "sflag": "-a",
+        "lflag": "--auto",
+        "text": "Auto mode. Start/stop jail(s) if required. Cannot be used with [-l|--live]."
+      },{
+        "sflag": "-l",
+        "lflag": "--live",
+        "text": "Clone a running jail (ZFS only). Cannot be used with [-a|--auto]."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "NEW_NAME", "IP"],
+      "help": "bastille clone [option(s)] TARGET NEW_NAME IP",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/clone.html"
+    },
+    {
+      "command": "cmd",
+      "description": "Execute command(s) inside jail(s).",
+      "options": [{
+        "sflag": "-a",
+        "lflag": "--auto",
+        "text": "Auto mode. Start/stop jail(s) if required."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "COMMAND"],
+      "help": "bastille cmd [option(s)] TARGET COMMAND",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/cmd.html"
+    },
+    {
+      "command": "config",
+      "description": "Get, set, add or remove properties from jail(s).",
+      "options": [{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "ACTION", "PROPERTY", "VALUE"],
+      "help": "bastille config [option(s)] TARGET [get|(set|add)|remove] PROPERTY [VALUE]",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/config.html"
+    },
+    {
+      "command": "console",
+      "description": "Console into a jail.",
+      "options": [{
+        "sflag": "-a",
+        "lflag": "--auto",
+        "text": "Auto mode. Start/stop jail(s) if required."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "USER"],
+      "help": "bastille console [option(s)] TARGET [USER]",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/console.html"
+    },
+    {
+      "command": "convert",
+      "description": "Convert a jail from thin to thick; convert a jail to a custom release.",
+      "options": [{
+        "sflag": "-a",
+        "lflag": "--auto",
+        "text": "Auto mode. Start/stop jail(s) if required."
+      },{
+        "sflag": "-y",
+        "lflag": "--yes",
+        "text": "Do not prompt. Just covert."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "RELEASE"],
+      "help": " bastille convert [option(s)] TARGET [RELEASE]",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/convert.html"
+    },
+    {
+      "command": "cp",
+      "description": "Copy file(s)/directorie(s) from host to jail(s).",
+      "options": [{
+        "sflag": "-q",
+        "lflag": "--quiet",
+        "text": "Suppress output."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "HOST_PATH", "JAIL_PATH"],
+      "help": "bastille cp [option(s)] TARGET HOST_PATH JAIL_PATH",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/cp.html"
+    },
+    {
+      "command": "create",
+      "description": "Create a jail.",
+      "options": [{
+        "sflag": "-B",
+        "lflag": "--bridge",
+        "text": "Enable VNET. INTERFACE must be a bridge."
+      },{
+        "sflag": "-C",
+        "lflag": "--clone",
+        "text": "Create a clone jail (ZFS only)."
+      },{
+        "sflag": "-D",
+        "lflag": "--dual",
+        "text": "Use dual (IPv4+6) networking (IP=[inherit|ip_hostname] only)."
+      },{
+        "sflag": "-E",
+        "lflag": "--empty",
+        "text": "Create an empty jail (NAME only)."
+      },{
+        "sflag": "-g",
+        "lflag": "--gateway",
+	"value": "string",
+        "text": "IP - Specify a default router/gateway."
+      },{
+        "sflag": "-L",
+        "lflag": "--linux",
+        "text": "Create a Linux jail (experimental)."
+      },{
+        "sflag": "-M",
+        "lflag": "--static-mac",
+        "text": "Use a static/persistent MAC address (VNET only)."
+      },{
+        "sflag": "-n",
+        "lflag": "--nameserver",
+	"value": "string",
+        "text": "IP - Specify nameserver(s) for the jail. Comma separated."
+      },{
+        "sflag": "--no-validate",
+        "lflag": "--no-validate",
+        "text": "Do not validate the release name."
+      },{
+        "sflag": "--no-boot",
+        "lflag": "--no-boot",
+        "text": "Set boot=off"
+      },{
+        "sflag": "-P",
+        "lflag": "--passthrough",
+        "text": "Enable VNET. INTERFACE is used as-is."
+      },{
+        "sflag": "-p",
+        "lflag": "--priority",
+	"value": "int",
+        "text": "VALUE - Set priority value."
+      },{
+        "sflag": "-T",
+        "lflag": "--thick",
+        "text": "Create a thick jail."
+      },{
+        "sflag": "-V",
+        "lflag": "--vnet",
+        "text": "Enable VNET. INTERFACE must be a physical interface."
+      },{
+        "sflag": "-v",
+        "lflag": "--vlan",
+	 "value": "int",
+        "text": "VLANID - Set VLAN ID (VNET only)."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      },{
+        "sflag": "-Z",
+        "lflag": "--zfs-opts",
+	"value": "string",
+        "text": "ZFS,OPTIONS - Custom zfs options. Comma-separated."
+      }],
+      "parameters": ["OPTIONS", "NAME", "RELEASE", "IP", "IFACE"],
+      "help": "bastille create [option(s)] NAME RELEASE IP [INTERFACE]",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/create.html"
+    },
+    {
+      "command": "destroy",
+      "description": "Destroy jail(s) or release(s).",
+      "options": [{
+        "sflag": "-a",
+        "lflag": "--auto",
+        "text": "Auto mode. Start/stop jail(s) if required."
+      },{
+        "sflag": "-c",
+        "lflag": "--no-cache",
+        "text": "Do not destroy cache when destroying a release (legacy releases)."
+      },{
+        "sflag": "-f",
+        "lflag": "--force",
+        "text": "Force unmount any mounted datasets when destroying a jail or release (ZFS only)."
+      },{
+        "sflag": "-y",
+        "lflag": "--yes",
+        "text": "Do no prompt. Assume always yes."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET"],
+      "help": "bastille destroy [option(s)] TARGET",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/destroy.html"
+    },
+    {
+      "command": "edit",
+      "description": "Edit jail configuration files (advanced).",
+      "options": [{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "FILE"],
+      "help": "bastille edit [option(s)] TARGET [FILE]",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/edit.html"
+    },
+    {
+      "command": "etcupdate",
+      "description": "Update /etc for jail(s).",
+      "options": [{
+        "sflag": "-d",
+        "lflag": "--dry-run",
+        "text": "Show output, but do not apply."
+      },{
+        "sflag": "-f",
+        "lflag": "--force",
+        "text": "Force a re-bootstrap of a RELEASE."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "ACTION", "RELEASE"],
+      "help": "bastille etcupdate [option(s)] [bootstrap|TARGET] [diff|resolve|update RELEASE]",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/etcupdate.html"
+    },
+    {
+      "command": "export",
+      "description": "Export a jail.",
+      "options": [{
+        "sflag": "-a",
+        "lflag": "--auto",
+        "text": "Auto mode. Start/stop jail(s) if required."
+      },{
+        "sflag": "--gz",
+        "lflag": "--gz",
+        "text": "Export to a '.gz' compressed image (ZFS only)."
+      },{
+        "sflag": "--xz",
+        "lflag": "--xz",
+        "text": "Export to a '.xz' compressed image (ZFS only)."
+      },{
+        "sflag": "--zst",
+        "lflag": "--zst",
+        "text": "Export to a '.zst' compressed image (ZFS only)."
+      },{
+        "sflag": "--raw",
+        "lflag": "--raw",
+        "text": "Export to an uncompressed RAW image (ZFS only)."
+      },{
+        "sflag": "--tgz",
+        "lflag": "--tgz",
+        "text": "Export to a '.tgz' compressed archive."
+      },{
+        "sflag": "--txz",
+        "lflag": "--txz",
+        "text": "Export to a '.txz' compressed archive."
+      },{
+        "sflag": "--tzst",
+        "lflag": "--tzst",
+        "text": "Export to a '.tzst' compressed archive."
+      },{
+        "sflag": "-v",
+        "lflag": "--verbose",
+        "text": "Be more verbose during the ZFS send operation."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "PATH"],
+      "help": "bastille export [option(s)] TARGET [PATH]",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/export.html"
+    },
+    {
+      "command": "help",
+      "description": "Help for any command.",
+      "options": [{
+        "sflag": "",
+        "lflag": "",
+        "text": ""
+      }],
+      "parameters": ["OPTIONS"],
+      "help": "Help text",
+      "helpUrl": ""
+    },
+    {
+      "command": "htop",
+      "description": "Interactive process viewer (requires htop).",
+      "options": [{
+        "sflag": "-a",
+        "lflag": "--auto",
+        "text": "Auto mode. Start/stop jail(s) if required."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET"],
+      "help": "bastille htop [option(s)] TARGET",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/htop.html"
+    },
+    {
+      "command": "import",
+      "description": "Import a jail.",
+      "options": [{
+        "sflag": "-f",
+        "lflag": "--force",
+        "text": "Force an archive import without validating checksum."
+      },{
+        "sflag": "-M",
+        "lflag": "--static-mac",
+        "text": "Use a static/persistent MAC address (VNET only) when importing foreign jails."
+      },{
+        "sflag": "-v",
+        "lflag": "--verbose",
+        "text": "Enable verbose mode (ZFS only)."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "FILE", "RELEASE"],
+      "help": "bastille import [option(s)] FILE [RELEASE]",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/import.html"
+    },
+    {
+      "command": "jcp",
+      "description": "Copy file(s)/directorie(s) from jail to jail(s).",
+      "options": [{
+        "sflag": "-q",
+        "lflag": "--quiet",
+        "text": "Suppress output."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "SOURCE_JAIL", "SOURCE_PATH", "DESTINATION_JAIL", "DESTINATION_PATH"],
+      "help": "bastille jcp [option(s)] SOURCE_JAIL SOURCE_PATH DESTINATION_JAIL DESTINATION_PATH",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/jcp.html"
+    },
+    {
+      "command": "limits",
+      "description": "Apply resources limits to jail(s). See rctl(8) and cpuset(1).",
+      "options": [{
+        "sflag": "-a",
+        "lflag": "--auto",
+        "text": "Auto mode. Start/stop jail(s) if required."
+      },{
+        "sflag": "-l",
+        "lflag": "--log",
+        "text": "Enable logging for the specified rule (RCTL only)."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "ACTION", "ARGS", "OPTION", "VALUE"],
+      "help": "bastille limits [option(s)] TARGET [add|remove|clear|reset|(list|show [active])|stats] OPTION [VALUE]",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/limits.html"
+    },
+    {
+      "command": "list",
+      "description": "List jails, releases, templates and more...",
+      "options": [{
+        "sflag": "-d",
+        "lflag": "--down",
+        "text": "List stopped jails only."
+      },{
+        "sflag": "-j",
+        "lflag": "--json",
+        "text": "List jails or sub-arg(s) in json format."
+      },{
+        "sflag": "-p",
+        "lflag": "--pretty",
+        "text": "Print JSON in columns."
+      },{
+        "sflag": "-u",
+        "lflag": "--up",
+        "text": "List running jails only."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "ITEM"],
+      "help": "bastille list [option(s)] [RELEASE (-p)] [all] [backup(s)] [export(s)] [import(s)] [ip(s)] [jail(s)] [limit(s)] [log(s)] [path(s)] [port(s)] [prio|priority] [release(s)] [state(s)] [template(s)] [type]",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/list.html"
+    },
+    {
+      "command": "migrate",
+      "description": "Migrate jail(s) to a remote system.",
+      "options": [{
+        "sflag": "-a",
+        "lflag": "--auto",
+        "text": "Auto mode. Start/stop jail(s) if required."
+      },{
+        "sflag": "-b",
+        "lflag": "--backup",
+        "text": "Keep archives on remote system."
+      },{
+        "sflag": "-d",
+        "lflag": "--destroy",
+        "text": "Destroy local jail after migration."
+      },{
+        "sflag": "--doas",
+        "lflag": "--doas",
+        "text": "Use 'doas' instead of 'sudo'."
+      },{
+        "sflag": "-k",
+        "lflag": "--keyfile",
+	"value": "string",
+        "text": "FILE - Specify an alternative private keyfile name. Must be in '~/.ssh'."
+      },{
+        "sflag": "-l",
+        "lflag": "--live",
+        "text": "Migrate a running jail (ZFS only)."
+      },{
+        "sflag": "-p",
+        "lflag": "--password",
+        "text": "Use password based authentication."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "DESTINATION"],
+      "help": "bastille migrate [option(s)] TARGET USER@HOST[:PORT]",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/migrate.html"
+    },
+    {
+      "command": "monitor",
+      "description": "Monitor and attempt to restart jail service(s).",
+      "options": [{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "ACTION", "SERVICE"],
+      "help": "bastille mount [option(s)] [TARGET|enable|disable|status] [add|delete|list [SERVICE]]",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/monitor.html"
+    },
+    {
+      "command": "mount",
+      "description": "Mount file(s)/directorie(s) inside jail(s).",
+      "options": [{
+        "sflag": "-a",
+        "lflag": "--auto",
+        "text": "Auto mode. Start/stop jail(s) if required."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "HOST_PATH", "JAIL_PATH", "FS_TYPE", "FS_OPTIONS", "DUMP", "PASS_NUMBER"],
+      "help": "bastille mount [option(s)] TARGET HOST_PATH JAIL_PATH [FS_TYPE FS_OPTIONS DUMP PASS_NUMBER]",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/mount.html"
+    },
+    {
+      "command": "network",
+      "description": "Add or remove interface(s) from jail(s).",
+      "options": [{
+        "sflag": "-a",
+        "lflag": "--auto",
+        "text": "Start/stop jail(s) if required."
+      },{
+        "sflag": "-B",
+        "lflag": "--bridge",
+        "text": "Add a bridge interface."
+      },{
+        "sflag": "-M",
+        "lflag": "--static-mac",
+        "text": "Use a static/persistent MAC address (VNET only)."
+      },{
+        "sflag": "-n",
+        "lflag": "--no-ip",
+        "text": "Create interface without an IP (VNET only)."
+      },{
+        "sflag": "-P",
+        "lflag": "--passthrough",
+        "text": "Add a raw interface."
+      },{
+        "sflag": "-V",
+        "lflag": "--vnet",
+        "text": "Add a physical interface."
+      },{
+        "sflag": "-v",
+        "lflag": "--vlan",
+	"value": "int",
+        "text": "VLANID - Assign VLANID to interface (VNET only)."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "ACTION", "IFACE", "IP"],
+      "help": "bastille network [option(s)] TARGET [remove|add] INTERFACE [IP]",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/network.html"
+    },
+    {
+      "command": "pkg",
+      "description": "Manage packages inside jail(s). See pkg(8).",
+      "options": [{
+        "sflag": "-a",
+        "lflag": "--auto",
+        "text": "Auto mode. Start/stop jail(s) if required."
+      },{
+        "sflag": "-H",
+        "lflag": "--host",
+        "text": "Use host 'pkg' instead of the jails."
+      },{
+        "sflag": "-y",
+        "lflag": "--yes",
+        "text": "Do not prompt. Assume always yes."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "ARGS"],
+      "help": "bastille pkg [option(s)] TARGET ARGS",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/pkg.html"
+    },
+    {
+      "command": "rcp",
+      "description": "Copy file(s)/directorie(s) from jail to host.",
+      "options": [{
+        "sflag": "-q",
+        "lflag": "--quiet",
+        "text": "Suppress output."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "JAIL_PATH", "HOST_PATH"],
+      "help": "bastille rcp [option(s)] TARGET JAIL_PATH HOST_PATH",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/rcp.html"
+    },
+    {
+      "command": "rdr",
+      "description": "Redirect host port to jail port.",
+      "options": [{
+        "sflag": "-d",
+        "lflag": "--destination",
+	"value": "string",
+        "text": "IP - Limit rdr to a destination IP."
+      },{
+        "sflag": "-i",
+        "lflag": "--interface",
+	"value": "string",
+        "text": "IF - Specify interface(s) to apply rule to. Comma-separated."
+      },{
+        "sflag": "-s",
+        "lflag": "--source",
+	"value": "string",
+        "text": "IP|TABLE - Limit rdr to a source IP or table."
+      },{
+        "sflag": "-t",
+        "lflag": "--type",
+	"value": "string",
+        "text": "ipv4|ipv6 - Specify IP type. Must be used if -s or -d are used. Defaults to both."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "ACTION", "PROTOCOL", "HOST_PORT", "JAIL_PORT", "LOG_OPTIONS"],
+      "help": "bastille rdr [option(s)] TARGET [clear|reset|list|(tcp|udp)] HOST_PORT JAIL_PORT [log LOG_OPTIONS]",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/rdr.html"
+    },
+    {
+      "command": "rename",
+      "description": "Rename a jail.",
+      "options": [{
+        "sflag": "-a",
+        "lflag": "--auto",
+        "text": "Auto mode. Start/stop jail(s) if required."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "NEW_NAME"],
+      "help": "bastille rename [option(s)] TARGET NEW_NAME",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/rename.html"
+    },
+    {
+      "command": "restart",
+      "description": "Restart a jail.",
+      "options": [{
+        "sflag": "-b",
+        "lflag": "--boot",
+        "text": "Respect jail boot setting."
+      },{
+        "sflag": "-d",
+        "lflag": "--delay",
+	"value": "int",
+        "text": "VALUE - Time (seconds) to wait after starting each jail."
+      },{
+        "sflag": "-i",
+        "lflag": "--ignore",
+        "text": "Ignore stopped jails (do not start if stopped)."
+      },{
+        "sflag": "-v",
+        "lflag": "--verbose",
+        "text": "Print every action on jail start."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET"],
+      "help": "bastille restart [option(s)] TARGET",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/restart.html"
+    },
+    {
+      "command": "service",
+      "description": "Manage services within jail(s).",
+      "options": [{
+        "sflag": "-a",
+        "lflag": "--auto",
+        "text": "Auto mode. Start/stop jail(s) if required."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "SERVICE", "ARGS"],
+      "help": "bastille service [option(s)] TARGET SERVICE ARGS",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/service.html"
+    },
+    {
+      "command": "setup",
+      "description": "Auto-configure network, firewall, storage and more...",
+      "options": [{
+        "sflag": "-y",
+        "lflag": "--yes",
+        "text": "Do not prompt. Assume always yes."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "ITEM", "ARGS"],
+      "help": "bastille setup [option(s)] [bridge|linux|loopback|netgraph|firewall|shared|storage|vnet]",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/setup.html"
+    },
+    {
+      "command": "start",
+      "description": "Start stopped jail(s).",
+      "options": [{
+        "sflag": "-b",
+        "lflag": "--boot",
+        "text": "Respect jail boot setting."
+      },{
+        "sflag": "-d",
+        "lflag": "--delay",
+	"value": "int",
+        "text": "VALUE - Time (seconds) to wait after starting each jail."
+      },{
+        "sflag": "-v",
+        "lflag": "--verbose",
+        "text": "Enable verbose mode."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET"],
+      "help": "bastille start [option(s)] TARGET",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/start.html"
+    },
+    {
+      "command": "stop",
+      "description": "Stop running jail(s).",
+      "options": [{
+        "sflag": "-v",
+        "lflag": "--verbose",
+        "text": "Enable verbose mode."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET"],
+      "help": "bastille stop [option(s)] TARGET",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/stop.html"
+    },
+    {
+      "command": "sysrc",
+      "description": "Edit rc files inside jail(s).",
+      "options": [{
+        "sflag": "-a",
+        "lflag": "--auto",
+        "text": "Auto mode. Start/stop jail(s) if required."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "ARGS"],
+      "help": "bastille sysrc [option(s)] TARGET ARGS",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/sysrc.html"
+    },
+    {
+      "command": "tags",
+      "description": "Add or remove tags to jail(s).",
+      "options": [{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "ACTION", "TAGS"],
+      "help": "bastille tags [option(s)] TARGET [add|delete|list] [TAGS]",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/tags.html"
+    },
+    {
+      "command": "template",
+      "description": "Apply templates to jail(s).",
+      "options": [{
+        "sflag": "-a",
+        "lflag": "--auto",
+        "text": "Auto mode. Start/stop jail(s) if required."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "ACTION", "TEMPLATE"],
+      "help": "bastille template [option(s)] TARGET|convert TEMPLATE",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/template.html"
+    },
+    {
+      "command": "top",
+      "description": "Process viewer. See top(1).",
+      "options": [{
+        "sflag": "-a",
+        "lflag": "--auto",
+        "text": "Auto mode. Start/stop jail(s) if required."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET"],
+      "help": "bastille top [options(s)] TARGET",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/top.html"
+    },
+    {
+      "command": "umount",
+      "description": "Unmount file(s)/directorie(s) from jail(s).",
+      "options": [{
+        "sflag": "-a",
+        "lflag": "--auto",
+        "text": "Auto mode. Start/stop jail(s) if required."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "JAIL_PATH"],
+      "help": "bastille umount [option(s)] TARGET JAIL_PATH",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/umount.html"
+    },
+    {
+      "command": "update",
+      "description": "Update a jail or release.",
+      "options": [{
+        "sflag": "-a",
+        "lflag": "--auto",
+        "text": "Auto mode. Start/stop jail(s) if required."
+      },{
+        "sflag": "-f",
+        "lflag": "--force",
+        "text": "Force update a release (FreeBSD legacy releases)."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET"],
+      "help": "bastille update [option(s)] TARGET",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/update.html"
+    },
+    {
+      "command": "upgrade",
+      "description": "Upgrade a jail to new release.",
+      "options": [{
+        "sflag": "-a",
+        "lflag": "--auto",
+        "text": "Auto mode. Start/stop jail(s) if required."
+      },{
+        "sflag": "-f",
+        "lflag": "--force",
+        "text": "Force upgrade a release (FreeBSD legacy releases)."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "NEW_RELEASE", "ACTION"],
+      "help": "bastille upgrade [option(s)] TARGET NEW_RELEASE|install",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/upgrade.html"
+    },
+    {
+      "command": "verify",
+      "description": "Compare release against a \"known good\" index.",
+      "options": [{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET"],
+      "help": "bastille verify [option(s)] RELEASE|TEMPLATE",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/verify.html"
+    },
+    {
+      "command": "zfs",
+      "description": "Manage ZFS options/attributes for jail(s).",
+      "options": [{
+        "sflag": "-a",
+        "lflag": "--auto",
+        "text": "Auto mode. Start/stop jail(s) if required."
+      },{
+        "sflag": "-v",
+        "lflag": "--verbose",
+        "text": "Enabel verbose mode."
+      },{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "TARGET", "ACTION", "TAG", "KEY_VALUE", "DATASET", "JAIL_PATH"],
+      "help": "bastille zfs [option(s)] TARGET destroy|rollback|snapshot [TAG] df|usage get|set key=value jail pool/dataset /jail/path unjail pool/dataset",
+      "helpUrl": "https://bastille.readthedocs.io/en/latest/chapters/subcommands/zfs.html"
+    }
+  ]
+}

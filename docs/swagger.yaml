@@ -1,0 +1,1840 @@
+info:
+  contact: {}
+paths:
+  /api/v1/{software}/{command}:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Return supported options and parameters for any command
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Software name (either 'bastille' or 'rocinante')
+        in: path
+        name: software
+        required: true
+        type: string
+      - description: Command name
+        in: path
+        name: command
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Command specs for the requested command
+          schema: {}
+      tags:
+      - spec
+  /api/v1/admin/add:
+    post:
+      consumes:
+      - application/json
+      description: Add an API key.
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: API key ID for authorization.
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: API key on which to perform the action.
+        in: header
+        name: X-API-Key
+        required: true
+        type: string
+      - description: API key ID on which to perform the action.
+        in: header
+        name: X-API-Key-ID
+        required: true
+        type: string
+      - description: scope
+        in: query
+        name: scope
+        type: string
+      - description: permissions
+        in: query
+        name: permissions
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - admin
+  /api/v1/admin/delete:
+    post:
+      consumes:
+      - application/json
+      description: Delete an API key.
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: API key ID for authorization.
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: API key on which to perform the action.
+        in: header
+        name: X-API-Key
+        required: true
+        type: string
+      - description: API key ID on which to perform the action.
+        in: header
+        name: X-API-Key-ID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - admin
+  /api/v1/admin/edit:
+    post:
+      consumes:
+      - application/json
+      description: Edit an API key.
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: API key ID for authorization.
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: API key on which to perform the action.
+        in: header
+        name: X-API-Key
+        required: true
+        type: string
+      - description: API key ID on which to perform the action.
+        in: header
+        name: X-API-Key-ID
+        required: true
+        type: string
+      - description: scope
+        in: query
+        name: scope
+        type: string
+      - description: permissions
+        in: query
+        name: permissions
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - admin
+  /api/v1/bastille/bootstrap:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Bootstrap a release or template(s).
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: arch
+        in: query
+        name: arch
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/clone:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Clone an existing jail.
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: new_name
+        in: query
+        name: new_name
+        type: string
+      - description: ip
+        in: query
+        name: ip
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/cmd:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Execute command(s) inside jail(s).
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: command
+        in: query
+        name: command
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/config:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Get, set, add or remove properties from jail(s).
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: action
+        in: query
+        name: action
+        type: string
+      - description: property
+        in: query
+        name: property
+        type: string
+      - description: value
+        in: query
+        name: value
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/console:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Console into a jail.
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: user
+        in: query
+        name: user
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/convert:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Convert a jail from thin to thick; convert a jail to a custom release.
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: release
+        in: query
+        name: release
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/cp:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Copy file(s)/directorie(s) from host to jail(s).
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: host_path
+        in: query
+        name: host_path
+        type: string
+      - description: jail_path
+        in: query
+        name: jail_path
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/create:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Create a jail.
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: release
+        in: query
+        name: release
+        type: string
+      - description: ip
+        in: query
+        name: ip
+        type: string
+      - description: iface
+        in: query
+        name: iface
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/destroy:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Destroy jail(s) or release(s).
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/edit:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Edit jail configuration files (advanced).
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: file
+        in: query
+        name: file
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/etcupdate:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Update /etc for jail(s).
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: action
+        in: query
+        name: action
+        type: string
+      - description: release
+        in: query
+        name: release
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/export:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Export a jail.
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: path
+        in: query
+        name: path
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/htop:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Interactive process viewer (requires htop).
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/import:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Import a jail.
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: file
+        in: query
+        name: file
+        type: string
+      - description: release
+        in: query
+        name: release
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/jcp:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Copy file(s)/directorie(s) from jail to jail(s).
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: source_jail
+        in: query
+        name: source_jail
+        type: string
+      - description: source_path
+        in: query
+        name: source_path
+        type: string
+      - description: destination_jail
+        in: query
+        name: destination_jail
+        type: string
+      - description: destination_path
+        in: query
+        name: destination_path
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/limits:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Apply resources limits to jail(s). See rctl(8) and cpuset(1).
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: action
+        in: query
+        name: action
+        type: string
+      - description: args
+        in: query
+        name: args
+        type: string
+      - description: option
+        in: query
+        name: option
+        type: string
+      - description: value
+        in: query
+        name: value
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/list:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: List jails, releases, templates and more...
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: item
+        in: query
+        name: item
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/migrate:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Migrate jail(s) to a remote system.
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: destination
+        in: query
+        name: destination
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/monitor:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Monitor and attempt to restart jail service(s).
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: action
+        in: query
+        name: action
+        type: string
+      - description: service
+        in: query
+        name: service
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/mount:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Mount file(s)/directorie(s) inside jail(s).
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: host_path
+        in: query
+        name: host_path
+        type: string
+      - description: jail_path
+        in: query
+        name: jail_path
+        type: string
+      - description: fs_type
+        in: query
+        name: fs_type
+        type: string
+      - description: fs_options
+        in: query
+        name: fs_options
+        type: string
+      - description: dump
+        in: query
+        name: dump
+        type: string
+      - description: pass_number
+        in: query
+        name: pass_number
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/network:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Add or remove interface(s) from jail(s).
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: action
+        in: query
+        name: action
+        type: string
+      - description: iface
+        in: query
+        name: iface
+        type: string
+      - description: ip
+        in: query
+        name: ip
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/pkg:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Manage packages inside jail(s). See pkg(8).
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: args
+        in: query
+        name: args
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/rcp:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Copy file(s)/directorie(s) from jail to host.
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: jail_path
+        in: query
+        name: jail_path
+        type: string
+      - description: host_path
+        in: query
+        name: host_path
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/rdr:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Redirect host port to jail port.
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: action
+        in: query
+        name: action
+        type: string
+      - description: protocol
+        in: query
+        name: protocol
+        type: string
+      - description: host_port
+        in: query
+        name: host_port
+        type: string
+      - description: jail_port
+        in: query
+        name: jail_port
+        type: string
+      - description: log_options
+        in: query
+        name: log_options
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/rename:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Rename a jail.
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: new_name
+        in: query
+        name: new_name
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/restart:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Restart a jail.
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/service:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Manage services within jail(s).
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: service
+        in: query
+        name: service
+        type: string
+      - description: args
+        in: query
+        name: args
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/setup:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Auto-configure network, firewall, storage and more...
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: item
+        in: query
+        name: item
+        type: string
+      - description: args
+        in: query
+        name: args
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/start:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Start stopped jail(s).
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/stop:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Stop running jail(s).
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/sysrc:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Edit rc files inside jail(s).
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: args
+        in: query
+        name: args
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/tags:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Add or remove tags to jail(s).
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: action
+        in: query
+        name: action
+        type: string
+      - description: tags
+        in: query
+        name: tags
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/template:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Apply templates to jail(s).
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: action
+        in: query
+        name: action
+        type: string
+      - description: template
+        in: query
+        name: template
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/top:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Process viewer. See top(1).
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/umount:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Unmount file(s)/directorie(s) from jail(s).
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: jail_path
+        in: query
+        name: jail_path
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/update:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Update a jail or release.
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/upgrade:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Upgrade a jail to new release.
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: new_release
+        in: query
+        name: new_release
+        type: string
+      - description: action
+        in: query
+        name: action
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/verify:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Compare release against a "known good" index.
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/bastille/zfs:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Manage ZFS options/attributes for jail(s).
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: target
+        in: query
+        name: target
+        type: string
+      - description: action
+        in: query
+        name: action
+        type: string
+      - description: tag
+        in: query
+        name: tag
+        type: string
+      - description: key_value
+        in: query
+        name: key_value
+        type: string
+      - description: dataset
+        in: query
+        name: dataset
+        type: string
+      - description: jail_path
+        in: query
+        name: jail_path
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - bastille
+  /api/v1/rocinante/bootstrap:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: url
+        in: query
+        name: url
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - rocinante
+  /api/v1/rocinante/cmd:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: args
+        in: query
+        name: args
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - rocinante
+  /api/v1/rocinante/limits:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: args
+        in: query
+        name: args
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - rocinante
+  /api/v1/rocinante/list:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - rocinante
+  /api/v1/rocinante/pkg:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: args
+        in: query
+        name: args
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - rocinante
+  /api/v1/rocinante/service:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ARGS
+        in: query
+        name: ARGS
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - rocinante
+  /api/v1/rocinante/sysctl:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: args
+        in: query
+        name: args
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - rocinante
+  /api/v1/rocinante/sysrc:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: args
+        in: query
+        name: args
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - rocinante
+  /api/v1/rocinante/template:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: action
+        in: query
+        name: action
+        type: string
+      - description: template
+        in: query
+        name: template
+        type: string
+      - description: args
+        in: query
+        name: args
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - rocinante
+  /api/v1/rocinante/update:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: args
+        in: query
+        name: args
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - rocinante
+  /api/v1/rocinante/upgrade:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: args
+        in: query
+        name: args
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - rocinante
+  /api/v1/rocinante/verify:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: options
+        in: query
+        name: options
+        type: string
+      - description: template
+        in: query
+        name: template
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - rocinante
+  /api/v1/rocinante/zfs:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: args
+        in: query
+        name: args
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - rocinante
+  /api/v1/rocinante/zpool:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: Authentication token (e.g., Bearer <token>)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: args
+        in: query
+        name: args
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - rocinante
+swagger: "2.0"

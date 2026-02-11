@@ -1,0 +1,81 @@
+{
+  "software": "rocinante",
+  "options": [
+    "Use 'rocinante -v|--version' for version information.",
+    "Use 'rocinante command -h|--help' for more information about a command."
+  ],
+  "help": "rocinante command [ARGS]",
+  "commands": [
+    {
+      "command": "bootstrap",
+      "options": [{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "URL"]
+    },
+    {
+      "command": "cmd",
+      "parameters": ["ARGS"]
+    },
+    {
+      "command": "limits",
+      "parameters": ["ARGS"]
+    },
+    {
+      "command": "list",
+      "options": [{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS"]
+    },
+    {
+      "command": "pkg",
+      "parameters": ["ARGS"]
+    },
+    {
+      "command": "service",
+      "parameters": ["ARGS"]
+    },
+    {
+      "command": "sysctl",
+      "parameters": ["ARGS"]
+    },
+    {
+      "command": "sysrc",
+      "parameters": ["ARGS"]
+    },
+    {
+      "command": "template",
+      "options": [{
+        "sflag": "-x",
+        "lflag": "--debug",
+        "text": "Enable debug mode."
+      }],
+      "parameters": ["OPTIONS", "ACTION", "TEMPLATE", "ARGS"]
+    },
+    {
+      "command": "update",
+      "parameters": ["ARGS"]
+    },
+    {
+      "command": "upgrade",
+      "parameters": ["ARGS"]
+    },
+    {
+      "command": "verify",
+      "parameters": ["OPTIONS", "TEMPLATE"]
+    },
+    {
+      "command": "zfs",
+      "parameters": ["ARGS"]
+    },
+    {
+      "command": "zpool",
+      "parameters": ["ARGS"]
+    }
+  ]
+}
