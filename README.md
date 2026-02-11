@@ -17,7 +17,10 @@ Run the following command to install the API server.
 ```shell
 make install
 cp /usr/local/etc/bastille-api/config.json.sample /usr/local/etc/bastille-api/config.json
+sysrc bastille_api_enable=YES
+service bastille-api start
 ```
+
 Customize the config file to your liking. We recommend only adding API keys
 through the API interface.
 
@@ -32,7 +35,7 @@ To use the console feature, you need to `pkg install ttyd`.
 bastille
 rocinante (optional)
 go
-ttyd
+ttyd (optional)
 ```
 
 ## API Usage
