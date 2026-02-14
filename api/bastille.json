@@ -165,13 +165,17 @@
 	"value": "string",
         "text": "IP - Specify nameserver(s) for the jail. Comma separated."
       },{
+        "sflag": "--no-boot",
+        "lflag": "--no-boot",
+        "text": "Set boot=off"
+      },{
         "sflag": "--no-validate",
         "lflag": "--no-validate",
         "text": "Do not validate the release name."
       },{
-        "sflag": "--no-boot",
-        "lflag": "--no-boot",
-        "text": "Set boot=off"
+        "sflag": "--no-ip",
+        "lflag": "--no-ip",
+        "text": "Create jail without an IP (VNET only)."
       },{
         "sflag": "-P",
         "lflag": "--passthrough",
