@@ -38,7 +38,7 @@ func BastilleCommandLive(args ...string) (string, error) {
 	defer bastilleLock.Unlock()
 
 	ttydArgs := []string{
-		"-i", "127.0.0.1",
+		"-i", "localhost",
 		"-t", "disableLeaveAlert=true",
 		"-b", "/api/v1/bastille/console/ttyd",
 		"-o",
