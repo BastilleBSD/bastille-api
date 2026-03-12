@@ -38,7 +38,7 @@ func BastilleCommandLive(args ...string) (string, error) {
 	defer bastilleLock.Unlock()
 
 	ttydArgs := []string{
-		"-i", "localhost",
+		"-i", "127.0.0.1",
 		"-t", "disableLeaveAlert=true",
 		"-b", "/api/v1/bastille/console/ttyd",
 		"-o",
@@ -99,7 +99,8 @@ func ParseAndRunBastilleCommand(c *gin.Context, cmdArgs []string) {
 
 // Bastille bootstrap POST
 // @Description Bootstrap a release or template(s).
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param arch query string false "arch"
@@ -131,7 +132,8 @@ func BastilleBootstrapHandler(c *gin.Context) {
 
 // Bastille clone POST
 // @Description Clone an existing jail.
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param new_name query string false "new_name"
@@ -180,7 +182,8 @@ func BastilleCloneHandler(c *gin.Context) {
 
 // Bastille cmd POST
 // @Description Execute command(s) inside jail(s).
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param command query string false "command"
@@ -220,7 +223,8 @@ func BastilleCmdHandler(c *gin.Context) {
 
 // Bastille config POST
 // @Description Get, set, add or remove properties from jail(s).
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param action query string false "action"
@@ -275,7 +279,8 @@ func BastilleConfigHandler(c *gin.Context) {
 
 // Bastille console POST
 // @Description Console into a jail.
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param user query string false "user"
@@ -312,7 +317,8 @@ func BastilleConsoleHandler(c *gin.Context) {
 
 // Bastille convert POST
 // @Description Convert a jail from thin to thick; convert a jail to a custom release.
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param release query string false "release"
@@ -353,7 +359,8 @@ func BastilleConvertHandler(c *gin.Context) {
 
 // Bastille cp POST
 // @Description Copy file(s)/directorie(s) from host to jail(s).
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param host_path query string false "host_path"
@@ -402,7 +409,8 @@ func BastilleCpHandler(c *gin.Context) {
 
 // Bastille create POST
 // @Description Create a jail.
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param name query string false "name"
 // @Param release query string false "release"
@@ -455,7 +463,8 @@ func BastilleCreateHandler(c *gin.Context) {
 
 // Bastille destroy POST
 // @Description Destroy jail(s) or release(s).
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Tags bastille
@@ -487,7 +496,8 @@ func BastilleDestroyHandler(c *gin.Context) {
 
 // Bastille edit POST
 // @Description Edit jail configuration files (advanced).
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param file query string false "file"
@@ -524,7 +534,8 @@ func BastilleEditHandler(c *gin.Context) {
 
 // Bastille etcupdate POST
 // @Description Update /etc for jail(s).
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param action query string false "action"
@@ -585,7 +596,8 @@ func BastilleEtcupdateHandler(c *gin.Context) {
 
 // Bastille export POST
 // @Description Export a jail.
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param path query string false "path"
@@ -622,7 +634,8 @@ func BastilleExportHandler(c *gin.Context) {
 
 // Bastille htop POST
 // @Description Interactive process viewer (requires htop).
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Tags bastille
@@ -654,7 +667,8 @@ func BastilleHtopHandler(c *gin.Context) {
 
 // Bastille import POST
 // @Description Import a jail.
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param file query string false "file"
 // @Param release query string false "release"
@@ -691,7 +705,8 @@ func BastilleImportHandler(c *gin.Context) {
 
 // Bastille jcp POST
 // @Description Copy file(s)/directorie(s) from jail to jail(s).
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param source_jail query string false "source_jail"
 // @Param source_path query string false "source_path"
@@ -747,7 +762,8 @@ func BastilleJcpHandler(c *gin.Context) {
 
 // Bastille limits POST
 // @Description Apply resources limits to jail(s). See rctl(8) and cpuset(1).
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param action query string false "action"
@@ -823,7 +839,8 @@ func BastilleLimitsHandler(c *gin.Context) {
 
 // Bastille list POST
 // @Description List jails, releases, templates and more...
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param item query string false "item"
 // @Tags bastille
@@ -852,7 +869,8 @@ func BastilleListHandler(c *gin.Context) {
 
 // Bastille migrate POST
 // @Description Migrate jail(s) to a remote system.
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param destination query string false "destination"
@@ -892,7 +910,8 @@ func BastilleMigrateHandler(c *gin.Context) {
 
 // Bastille monitor POST
 // @Description Monitor and attempt to restart jail service(s).
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param action query string false "action"
@@ -946,7 +965,8 @@ func BastilleMonitorHandler(c *gin.Context) {
 
 // Bastille mount POST
 // @Description Mount file(s)/directorie(s) inside jail(s).
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param host_path query string false "host_path"
@@ -1011,7 +1031,8 @@ func BastilleMountHandler(c *gin.Context) {
 
 // Bastille network POST
 // @Description Add or remove interface(s) from jail(s).
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param action query string false "action"
@@ -1068,7 +1089,8 @@ func BastilleNetworkHandler(c *gin.Context) {
 
 // Bastille pkg POST
 // @Description Manage packages inside jail(s). See pkg(8).
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param args query string false "args"
@@ -1109,7 +1131,8 @@ func BastillePkgHandler(c *gin.Context) {
 
 // Bastille rcp POST
 // @Description Copy file(s)/directorie(s) from jail to host.
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param jail_path query string false "jail_path"
@@ -1159,7 +1182,8 @@ func BastilleRcpHandler(c *gin.Context) {
 
 // Bastille rdr POST
 // @Description Redirect host port to jail port.
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param action query string false "action"
@@ -1235,7 +1259,8 @@ func BastilleRdrHandler(c *gin.Context) {
 
 // Bastille rename POST
 // @Description Rename a jail.
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param new_name query string false "new_name"
@@ -1274,7 +1299,8 @@ func BastilleRenameHandler(c *gin.Context) {
 
 // Bastille restart POST
 // @Description Restart a jail.
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Tags bastille
@@ -1306,7 +1332,8 @@ func BastilleRestartHandler(c *gin.Context) {
 
 // Bastille service POST
 // @Description Manage services within jail(s).
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param service query string false "service"
@@ -1354,7 +1381,8 @@ func BastilleServiceHandler(c *gin.Context) {
 
 // Bastille setup POST
 // @Description Auto-configure network, firewall, storage and more...
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param item query string false "item"
 // @Param args query string false "args"
@@ -1388,7 +1416,8 @@ func BastilleSetupHandler(c *gin.Context) {
 
 // Bastille start POST
 // @Description Start stopped jail(s).
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Tags bastille
@@ -1420,7 +1449,8 @@ func BastilleStartHandler(c *gin.Context) {
 
 // Bastille stop POST
 // @Description Stop running jail(s).
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Tags bastille
@@ -1452,7 +1482,8 @@ func BastilleStopHandler(c *gin.Context) {
 
 // Bastille sysrc POST
 // @Description Edit rc files inside jail(s).
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param args query string false "args"
@@ -1492,7 +1523,8 @@ func BastilleSysrcHandler(c *gin.Context) {
 
 // Bastille tags POST
 // @Description Add or remove tags to jail(s).
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param action query string false "action"
@@ -1546,7 +1578,8 @@ func BastilleTagsHandler(c *gin.Context) {
 
 // Bastille template POST
 // @Description Apply templates to jail(s).
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param action query string false "action"
@@ -1599,7 +1632,8 @@ func BastilleTemplateHandler(c *gin.Context) {
 
 // Bastille top POST
 // @Description Process viewer. See top(1).
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Tags bastille
@@ -1631,7 +1665,8 @@ func BastilleTopHandler(c *gin.Context) {
 
 // Bastille umount POST
 // @Description Unmount file(s)/directorie(s) from jail(s).
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param jail_path query string false "jail_path"
@@ -1671,7 +1706,8 @@ func BastilleUmountHandler(c *gin.Context) {
 
 // Bastille update POST
 // @Description Update a jail or release.
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Tags bastille
@@ -1703,7 +1739,8 @@ func BastilleUpdateHandler(c *gin.Context) {
 
 // Bastille upgrade POST
 // @Description Upgrade a jail to new release.
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param new_release query string false "new_release"
@@ -1750,7 +1787,8 @@ func BastilleUpgradeHandler(c *gin.Context) {
 
 // Bastille verify POST
 // @Description Compare release against a "known good" index.
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Tags bastille
@@ -1782,7 +1820,8 @@ func BastilleVerifyHandler(c *gin.Context) {
 
 // Bastille zfs POST
 // @Description Manage ZFS options/attributes for jail(s).
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param options query string false "options"
 // @Param target query string false "target"
 // @Param action query string false "action"

@@ -2,13 +2,11 @@
 
 ## Commands
 
-The API handles all bastille commands, and is consistent with
-the syntax of the CLI. Any parameter passed via the CLI is named
+The API handles all Bastille commands, and is consistent with
+the syntax of the CLI. Any parameters passed via the CLI are named
 the same in the API, with some exceptions. Any command that supports
 both a jail or a release, will only accept a `target` parameter. See
 the `destroy` example below.
-
-Ir also handles all Rocinante commands, except for the `CP` hook.
 
 ## Setup
 
@@ -25,7 +23,7 @@ Customize the config file to your liking. We recommend only adding API keys
 through the API interface.
 
 Requests made via the API must contain an `Authorization: Bearer API_KEY` header as well
-as an `Authorization-ID: keyid` header.
+as an `Authorization-ID: API_KEY_ID` header.
 
 To use the console feature, you need to `pkg install ttyd`.
 
@@ -33,7 +31,6 @@ To use the console feature, you need to `pkg install ttyd`.
 
 ```
 bastille
-rocinante (optional)
 go
 ttyd (optional)
 ```
@@ -45,8 +42,6 @@ run the command, it must be a POST request.
 
 Bastille endpoint: `/api/v1/bastille/command`
 
-Rocinante endpoint: `/api/v1/rocinante/command`
-
 Any parameter/option string that has spaces should be passed with either
 a `+` or `%20` as the space character. See examples below...
 
@@ -55,11 +50,14 @@ at /swagger/index.html should have all you need to get started. Keys are stored 
 as the hashed value of the specified key. The initial hash in the sample file comes from the following
 command, `printf "my-random-saltbastille-api-key" | sha256sum`.
 
+The included default API key is `bastille-api-key` and the key ID is `bastille`. It is configured
+to allow all Bastille permissions as well as all admin permissions.
+
 The `my-random-salt` above should go in the `salt` json parameter, while the output of the above
-command should go into the `hash` parameter. The actual name of the key (keyid) can be anything
+command should go into the `hash` parameter. The actual name of the key (Key ID) can be anything
 you want it to be, but that is the value that goes into the `Authorization-ID` header.
 
-The API key structure has a keyID (easy to remember name), under which are the 
+The API key structure has a KeyID (easy to remember name), under which are the 
 salt, hash and permissions. The key ID must be passed under the `Authorization-ID` header
 and the actual API key must be passed with the `Authorization` header.The API has no way
 of remembering or storing your actual API key, so keep it safe.
@@ -99,13 +97,6 @@ curl -X POST "http://ip:port/api/v1/bastille/destroy?target=test&options=-f+-a+-
 Run a command inside a jail
 ```
 curl -X POST "http://ip:port/api/v1/bastille/cmd?target=test&command=echo+hi+how%20are%20you" \
-     -H "Authorization: Bearer API_KEY" \
-     -H "Authorization-ID: keyid"
-```
-
-Apply a template using rocinante
-```
-curl -X POST "http://ip:port/api/v1/rocinante/template?template=custom/template" \
      -H "Authorization: Bearer API_KEY" \
      -H "Authorization-ID: keyid"
 ```

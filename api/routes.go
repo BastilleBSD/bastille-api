@@ -28,27 +28,11 @@ func loadRoutes(router *gin.Engine) {
 	bastilleConsole.Any("/*any", consoleProxy("http://localhost:7681"))
 
 	for path, handler := range bastilleRoutes() {
-		bastille.GET("/"+path, apiKeyMiddleware("bastille", path), GetCommandSpec(path, "bastille"))
+		bastille.GET("/"+path, apiKeyMiddleware("bastille", path), GetCommandSpec(path))
 		bastille.POST("/"+path, apiKeyMiddleware("bastille", path), handler)
 
-		bastilleLive.GET("/"+path, apiKeyMiddleware("bastille", path), GetCommandSpec(path, "bastille"))
+		bastilleLive.GET("/"+path, apiKeyMiddleware("bastille", path), GetCommandSpec(path))
 		bastilleLive.POST("/"+path, apiKeyMiddleware("bastille", path), handler)
-	}
-
-	rocinante := v1.Group("/rocinante")
-	rocinanteLive := v1.Group("/rocinante/live")
-	rocinanteConsole := v1.Group("/rocinante/console/ttyd")
-
-	// use the following to require auth
-	// rocinanteConsole.Any("/*any", apiKeyMiddleware("bastille", "console"), consoleProxy("http://localhost:7681"))
-	rocinanteConsole.Any("/*any", consoleProxy("http://localhost:7681"))
-
-	for path, handler := range rocinanteRoutes() {
-		rocinante.GET("/"+path, apiKeyMiddleware("rocinante", path), GetCommandSpec(path, "rocinante"))
-		rocinante.POST("/"+path, apiKeyMiddleware("rocinante", path), handler)
-
-		rocinanteLive.GET("/"+path, apiKeyMiddleware("rocinante", path), GetCommandSpec(path, "rocinante"))
-		rocinanteLive.POST("/"+path, apiKeyMiddleware("rocinante", path), handler)
 	}
 
 	admin := v1.Group("/admin")
@@ -100,24 +84,5 @@ func bastilleRoutes() map[string]gin.HandlerFunc {
 		"upgrade":   BastilleUpgradeHandler,
 		"verify":    BastilleVerifyHandler,
 		"zfs":       BastilleZfsHandler,
-	}
-}
-
-func rocinanteRoutes() map[string]gin.HandlerFunc {
-	return map[string]gin.HandlerFunc{
-		"bootstrap": RocinanteBootstrapHandler,
-		"cmd":       RocinanteCmdHandler,
-		"limits":    RocinanteLimitsHandler,
-		"list":      RocinanteListHandler,
-		"pkg":       RocinantePkgHandler,
-		"service":   RocinanteServiceHandler,
-		"sysctl":    RocinanteSysctlHandler,
-		"sysrc":     RocinanteSysrcHandler,
-		"template":  RocinanteTemplateHandler,
-		"update":    RocinanteUpdateHandler,
-		"upgrade":   RocinanteUpgradeHandler,
-		"verify":    RocinanteVerifyHandler,
-		"zfs":       RocinanteZfsHandler,
-		"zpool":     RocinanteZpoolHandler,
 	}
 }

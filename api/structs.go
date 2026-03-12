@@ -8,7 +8,6 @@ type ConfigStruct struct {
 
 type PermissionsStruct struct {
 	Bastille  []string `json:"bastille"`
-	Rocinante []string `json:"rocinante"`
 	Admin     []string `json:"admin"`
 }
 
@@ -38,29 +37,6 @@ type BastilleCommandStruct struct {
 }
 
 type BastilleCommandOutputStruct struct {
-	output string
-	port   string
-}
-
-type RocinanteSpecStruct struct {
-	Software string                   `json:"software"`
-	Commands []RocinanteCommandStruct `json:"commands"`
-}
-
-type RocinanteOptionStruct struct {
-	SFlag string      `json:"sflag"`
-	LFlag string      `json:"lflag"`
-	Text  string      `json:"text"`
-	Value interface{} `json:"value,omitempty"`
-}
-
-type RocinanteCommandStruct struct {
-	Command    string                  `json:"command"`
-	Options    []RocinanteOptionStruct `json:"options"`
-	Parameters []string                `json:"parameters"`
-}
-
-type RocinanteCommandOutputStruct struct {
 	output string
 	port   string
 }

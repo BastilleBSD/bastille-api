@@ -30,29 +30,29 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "API key ID for authorization.",
+                        "description": "API Key ID/Name (eg: bastille-key)",
                         "name": "Authorization-ID",
                         "in": "header",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "description": "API key on which to perform the action.",
-                        "name": "X-API-Key",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
+                        "name": "Authorization",
                         "in": "header",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "description": "API key ID on which to perform the action.",
+                        "description": "API Key ID/Name on which to perform the action.",
                         "name": "X-API-Key-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "API token on which to perform the action.",
+                        "name": "X-API-Key",
                         "in": "header",
                         "required": true
                     },
@@ -94,29 +94,29 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "API key ID for authorization.",
+                        "description": "API Key ID/Name (eg: bastille-key)",
                         "name": "Authorization-ID",
                         "in": "header",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "description": "API key on which to perform the action.",
-                        "name": "X-API-Key",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
+                        "name": "Authorization",
                         "in": "header",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "description": "API key ID on which to perform the action.",
+                        "description": "API Key ID/Name on which to perform the action.",
                         "name": "X-API-Key-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "API token on which to perform the action.",
+                        "name": "X-API-Key",
                         "in": "header",
                         "required": true
                     }
@@ -146,29 +146,29 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "API key ID for authorization.",
+                        "description": "API Key ID/Name (eg: bastille-key)",
                         "name": "Authorization-ID",
                         "in": "header",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "description": "API key on which to perform the action.",
-                        "name": "X-API-Key",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
+                        "name": "Authorization",
                         "in": "header",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "description": "API key ID on which to perform the action.",
+                        "description": "API Key ID/Name on which to perform the action.",
                         "name": "X-API-Key-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "API token on which to perform the action.",
+                        "name": "X-API-Key",
                         "in": "header",
                         "required": true
                     },
@@ -210,7 +210,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -259,7 +266,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -314,7 +328,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -363,7 +384,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -424,7 +452,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -473,7 +508,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -522,7 +564,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -577,7 +626,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -638,7 +694,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -681,7 +744,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -730,7 +800,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -785,7 +862,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -834,7 +918,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -877,7 +968,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -926,7 +1024,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -987,7 +1092,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -1054,7 +1166,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -1097,7 +1216,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -1146,7 +1272,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -1201,7 +1334,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -1280,7 +1420,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -1341,7 +1488,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -1390,7 +1544,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -1445,7 +1606,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -1518,7 +1686,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -1567,7 +1742,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -1610,7 +1792,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -1665,7 +1854,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -1714,7 +1910,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -1757,7 +1960,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -1800,7 +2010,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -1849,7 +2066,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -1904,7 +2128,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -1959,7 +2190,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -2002,7 +2240,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -2051,7 +2296,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -2094,7 +2346,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -2149,7 +2408,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -2192,7 +2458,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -2250,541 +2523,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/rocinante/bootstrap": {
-            "post": {
-                "consumes": [
-                    "application/x-www-form-urlencoded"
-                ],
-                "produces": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "rocinante"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "options",
-                        "name": "options",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "url",
-                        "name": "url",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/rocinante/cmd": {
-            "post": {
-                "consumes": [
-                    "application/x-www-form-urlencoded"
-                ],
-                "produces": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "rocinante"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "args",
-                        "name": "args",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/rocinante/limits": {
-            "post": {
-                "consumes": [
-                    "application/x-www-form-urlencoded"
-                ],
-                "produces": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "rocinante"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "args",
-                        "name": "args",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/rocinante/list": {
-            "post": {
-                "consumes": [
-                    "application/x-www-form-urlencoded"
-                ],
-                "produces": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "rocinante"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "options",
-                        "name": "options",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/rocinante/pkg": {
-            "post": {
-                "consumes": [
-                    "application/x-www-form-urlencoded"
-                ],
-                "produces": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "rocinante"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "args",
-                        "name": "args",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/rocinante/service": {
-            "post": {
-                "consumes": [
-                    "application/x-www-form-urlencoded"
-                ],
-                "produces": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "rocinante"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "ARGS",
-                        "name": "ARGS",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/rocinante/sysctl": {
-            "post": {
-                "consumes": [
-                    "application/x-www-form-urlencoded"
-                ],
-                "produces": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "rocinante"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "args",
-                        "name": "args",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/rocinante/sysrc": {
-            "post": {
-                "consumes": [
-                    "application/x-www-form-urlencoded"
-                ],
-                "produces": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "rocinante"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "args",
-                        "name": "args",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/rocinante/template": {
-            "post": {
-                "consumes": [
-                    "application/x-www-form-urlencoded"
-                ],
-                "produces": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "rocinante"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "options",
-                        "name": "options",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "action",
-                        "name": "action",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "template",
-                        "name": "template",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "args",
-                        "name": "args",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/rocinante/update": {
-            "post": {
-                "consumes": [
-                    "application/x-www-form-urlencoded"
-                ],
-                "produces": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "rocinante"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "args",
-                        "name": "args",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/rocinante/upgrade": {
-            "post": {
-                "consumes": [
-                    "application/x-www-form-urlencoded"
-                ],
-                "produces": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "rocinante"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "args",
-                        "name": "args",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/rocinante/verify": {
-            "post": {
-                "consumes": [
-                    "application/x-www-form-urlencoded"
-                ],
-                "produces": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "rocinante"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "options",
-                        "name": "options",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "template",
-                        "name": "template",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/rocinante/zfs": {
-            "post": {
-                "consumes": [
-                    "application/x-www-form-urlencoded"
-                ],
-                "produces": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "rocinante"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "args",
-                        "name": "args",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/rocinante/zpool": {
-            "post": {
-                "consumes": [
-                    "application/x-www-form-urlencoded"
-                ],
-                "produces": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "rocinante"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "args",
-                        "name": "args",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/{software}/{command}": {
+        "/api/v1/bastille/{command}": {
             "get": {
                 "description": "Return supported options and parameters for any command",
                 "consumes": [
@@ -2799,16 +2538,16 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authentication token (e.g., Bearer \u003ctoken\u003e)",
-                        "name": "Authorization",
+                        "description": "API Key ID/Name (eg: bastille-key)",
+                        "name": "Authorization-ID",
                         "in": "header",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "description": "Software name (either 'bastille' or 'rocinante')",
-                        "name": "software",
-                        "in": "path",
+                        "description": "Authorization Header (eg: Bearer \u003capi-token\u003e)",
+                        "name": "Authorization",
+                        "in": "header",
                         "required": true
                     },
                     {

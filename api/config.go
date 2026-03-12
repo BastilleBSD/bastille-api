@@ -6,7 +6,6 @@ import (
 )
 
 var bastilleSpec *BastilleSpecStruct
-var rocinanteSpec *RocinanteSpecStruct
 var configFile = "/usr/local/etc/bastille-api/config.json"
 var cfg *ConfigStruct
 var APIURL string
@@ -32,27 +31,6 @@ func loadBastilleSpec() (*BastilleSpecStruct, error) {
 
 	bastilleSpec = &spec
 	return bastilleSpec, nil
-}
-
-func loadRocinanteSpec() (*RocinanteSpecStruct, error) {
-
-	logRequest("debug", "loadRocinanteSpec", nil, nil, nil)
-
-	var spec RocinanteSpecStruct
-
-	data, err := specSheets.ReadFile("rocinante.json")
-	if err != nil {
-		logRequest("error", "Failed to read Rocinante spec file", nil, nil, err.Error())
-		return nil, err
-	}
-
-	if err := json.Unmarshal(data, &spec); err != nil {
-		logRequest("error", "Failed to parse Rocinante spec", nil, nil, err.Error())
-		return nil, err
-	}
-
-	rocinanteSpec = &spec
-	return rocinanteSpec, nil
 }
 
 func loadConfig() (*ConfigStruct, error) {

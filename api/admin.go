@@ -60,10 +60,6 @@ func validateParameters(scope string, permissions []string, c *gin.Context) erro
         for _, cmd := range bastilleSpec.Commands {
             validCommands = append(validCommands, cmd.Command)
         }
-    case "rocinante":
-        for _, cmd := range rocinanteSpec.Commands {
-            validCommands = append(validCommands, cmd.Command)
-        }
     case "admin":
         validCommands = []string{"add", "delete", "edit"}
     default:
@@ -87,10 +83,10 @@ func validateParameters(scope string, permissions []string, c *gin.Context) erro
 
 // Admin add POST
 // @Description Add an API key.
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
-// @Param Authorization-ID header string true "API key ID for authorization."
-// @Param X-API-Key header string true "API key on which to perform the action."
-// @Param X-API-Key-ID header string true "API key ID on which to perform the action."
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
+// @Param X-API-Key-ID header string true "API Key ID/Name on which to perform the action."
+// @Param X-API-Key header string true "API token on which to perform the action."
 // @Param scope query string false "scope"
 // @Param permissions query string false "permissions"
 // @Tags admin
@@ -155,7 +151,6 @@ func AddKeyHandler(c *gin.Context) {
 		Hash: saltedHash,
 		Permissions: PermissionsStruct{
 			Bastille:  []string{},
-			Rocinante: []string{},
 			Admin:     []string{},
 		},
 	}
@@ -163,8 +158,6 @@ func AddKeyHandler(c *gin.Context) {
 	switch scope {
 	case "bastille":
 		newKey.Permissions.Bastille = permissions
-	case "rocinante":
-		newKey.Permissions.Rocinante = permissions
 	case "admin":
 		newKey.Permissions.Admin = permissions
 	default:
@@ -187,10 +180,10 @@ func AddKeyHandler(c *gin.Context) {
 
 // Admin edit POST
 // @Description Edit an API key.
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
-// @Param Authorization-ID header string true "API key ID for authorization."
-// @Param X-API-Key header string true "API key on which to perform the action."
-// @Param X-API-Key-ID header string true "API key ID on which to perform the action."
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
+// @Param X-API-Key-ID header string true "API Key ID/Name on which to perform the action."
+// @Param X-API-Key header string true "API token on which to perform the action."
 // @Param scope query string false "scope"
 // @Param permissions query string false "permissions"
 // @Tags admin
@@ -247,8 +240,6 @@ func EditKeyHandler(c *gin.Context) {
 	switch scope {
 	case "bastille":
 		keyData.Permissions.Bastille = permissions
-	case "rocinante":
-		keyData.Permissions.Rocinante = permissions
 	case "admin":
 		keyData.Permissions.Admin = permissions
 	default:
@@ -271,10 +262,10 @@ func EditKeyHandler(c *gin.Context) {
 
 // Admin delete POST
 // @Description Delete an API key.
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
-// @Param Authorization-ID header string true "API key ID for authorization."
-// @Param X-API-Key header string true "API key on which to perform the action."
-// @Param X-API-Key-ID header string true "API key ID on which to perform the action."
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
+// @Param X-API-Key-ID header string true "API Key ID/Name on which to perform the action."
+// @Param X-API-Key header string true "API token on which to perform the action."
 // @Tags admin
 // @Accept json
 // @Produce json

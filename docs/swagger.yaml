@@ -1,59 +1,30 @@
 info:
   contact: {}
 paths:
-  /api/v1/{software}/{command}:
-    get:
-      consumes:
-      - application/x-www-form-urlencoded
-      description: Return supported options and parameters for any command
-      parameters:
-      - description: Authentication token (e.g., Bearer <token>)
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: Software name (either 'bastille' or 'rocinante')
-        in: path
-        name: software
-        required: true
-        type: string
-      - description: Command name
-        in: path
-        name: command
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Command specs for the requested command
-          schema: {}
-      tags:
-      - spec
   /api/v1/admin/add:
     post:
       consumes:
       - application/json
       description: Add an API key.
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: API key ID for authorization.
+      - description: 'API Key ID/Name (eg: bastille-key)'
         in: header
         name: Authorization-ID
         required: true
         type: string
-      - description: API key on which to perform the action.
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
-        name: X-API-Key
+        name: Authorization
         required: true
         type: string
-      - description: API key ID on which to perform the action.
+      - description: API Key ID/Name on which to perform the action.
         in: header
         name: X-API-Key-ID
+        required: true
+        type: string
+      - description: API token on which to perform the action.
+        in: header
+        name: X-API-Key
         required: true
         type: string
       - description: scope
@@ -79,24 +50,24 @@ paths:
       - application/json
       description: Delete an API key.
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: API key ID for authorization.
+      - description: 'API Key ID/Name (eg: bastille-key)'
         in: header
         name: Authorization-ID
         required: true
         type: string
-      - description: API key on which to perform the action.
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
-        name: X-API-Key
+        name: Authorization
         required: true
         type: string
-      - description: API key ID on which to perform the action.
+      - description: API Key ID/Name on which to perform the action.
         in: header
         name: X-API-Key-ID
+        required: true
+        type: string
+      - description: API token on which to perform the action.
+        in: header
+        name: X-API-Key
         required: true
         type: string
       produces:
@@ -114,24 +85,24 @@ paths:
       - application/json
       description: Edit an API key.
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: API key ID for authorization.
+      - description: 'API Key ID/Name (eg: bastille-key)'
         in: header
         name: Authorization-ID
         required: true
         type: string
-      - description: API key on which to perform the action.
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
-        name: X-API-Key
+        name: Authorization
         required: true
         type: string
-      - description: API key ID on which to perform the action.
+      - description: API Key ID/Name on which to perform the action.
         in: header
         name: X-API-Key-ID
+        required: true
+        type: string
+      - description: API token on which to perform the action.
+        in: header
+        name: X-API-Key
         required: true
         type: string
       - description: scope
@@ -151,13 +122,47 @@ paths:
             type: string
       tags:
       - admin
+  /api/v1/bastille/{command}:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Return supported options and parameters for any command
+      parameters:
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Command name
+        in: path
+        name: command
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Command specs for the requested command
+          schema: {}
+      tags:
+      - spec
   /api/v1/bastille/bootstrap:
     post:
       consumes:
       - application/x-www-form-urlencoded
       description: Bootstrap a release or template(s).
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -189,7 +194,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Clone an existing jail.
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -225,7 +235,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Execute command(s) inside jail(s).
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -257,7 +272,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Get, set, add or remove properties from jail(s).
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -297,7 +317,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Console into a jail.
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -329,7 +354,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Convert a jail from thin to thick; convert a jail to a custom release.
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -361,7 +391,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Copy file(s)/directorie(s) from host to jail(s).
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -397,7 +432,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Create a jail.
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -437,7 +477,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Destroy jail(s) or release(s).
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -465,7 +510,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Edit jail configuration files (advanced).
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -497,7 +547,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Update /etc for jail(s).
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -533,7 +588,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Export a jail.
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -565,7 +625,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Interactive process viewer (requires htop).
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -593,7 +658,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Import a jail.
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -625,7 +695,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Copy file(s)/directorie(s) from jail to jail(s).
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -665,7 +740,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Apply resources limits to jail(s). See rctl(8) and cpuset(1).
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -709,7 +789,12 @@ paths:
       - application/x-www-form-urlencoded
       description: List jails, releases, templates and more...
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -737,7 +822,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Migrate jail(s) to a remote system.
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -769,7 +859,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Monitor and attempt to restart jail service(s).
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -805,7 +900,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Mount file(s)/directorie(s) inside jail(s).
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -857,7 +957,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Add or remove interface(s) from jail(s).
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -897,7 +1002,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Manage packages inside jail(s). See pkg(8).
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -929,7 +1039,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Copy file(s)/directorie(s) from jail to host.
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -965,7 +1080,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Redirect host port to jail port.
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -1013,7 +1133,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Rename a jail.
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -1045,7 +1170,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Restart a jail.
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -1073,7 +1203,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Manage services within jail(s).
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -1109,7 +1244,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Auto-configure network, firewall, storage and more...
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -1141,7 +1281,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Start stopped jail(s).
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -1169,7 +1314,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Stop running jail(s).
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -1197,7 +1347,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Edit rc files inside jail(s).
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -1229,7 +1384,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Add or remove tags to jail(s).
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -1265,7 +1425,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Apply templates to jail(s).
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -1301,7 +1466,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Process viewer. See top(1).
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -1329,7 +1499,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Unmount file(s)/directorie(s) from jail(s).
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -1361,7 +1536,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Update a jail or release.
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -1389,7 +1569,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Upgrade a jail to new release.
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -1425,7 +1610,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Compare release against a "known good" index.
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -1453,7 +1643,12 @@ paths:
       - application/x-www-form-urlencoded
       description: Manage ZFS options/attributes for jail(s).
       parameters:
-      - description: Authentication token (e.g., Bearer <token>)
+      - description: 'API Key ID/Name (eg: bastille-key)'
+        in: header
+        name: Authorization-ID
+        required: true
+        type: string
+      - description: 'Authorization Header (eg: Bearer <api-token>)'
         in: header
         name: Authorization
         required: true
@@ -1495,346 +1690,4 @@ paths:
             type: string
       tags:
       - bastille
-  /api/v1/rocinante/bootstrap:
-    post:
-      consumes:
-      - application/x-www-form-urlencoded
-      parameters:
-      - description: Authentication token (e.g., Bearer <token>)
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: options
-        in: query
-        name: options
-        type: string
-      - description: url
-        in: query
-        name: url
-        type: string
-      produces:
-      - text/plain
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      tags:
-      - rocinante
-  /api/v1/rocinante/cmd:
-    post:
-      consumes:
-      - application/x-www-form-urlencoded
-      parameters:
-      - description: Authentication token (e.g., Bearer <token>)
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: args
-        in: query
-        name: args
-        type: string
-      produces:
-      - text/plain
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      tags:
-      - rocinante
-  /api/v1/rocinante/limits:
-    post:
-      consumes:
-      - application/x-www-form-urlencoded
-      parameters:
-      - description: Authentication token (e.g., Bearer <token>)
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: args
-        in: query
-        name: args
-        type: string
-      produces:
-      - text/plain
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      tags:
-      - rocinante
-  /api/v1/rocinante/list:
-    post:
-      consumes:
-      - application/x-www-form-urlencoded
-      parameters:
-      - description: Authentication token (e.g., Bearer <token>)
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: options
-        in: query
-        name: options
-        type: string
-      produces:
-      - text/plain
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      tags:
-      - rocinante
-  /api/v1/rocinante/pkg:
-    post:
-      consumes:
-      - application/x-www-form-urlencoded
-      parameters:
-      - description: Authentication token (e.g., Bearer <token>)
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: args
-        in: query
-        name: args
-        type: string
-      produces:
-      - text/plain
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      tags:
-      - rocinante
-  /api/v1/rocinante/service:
-    post:
-      consumes:
-      - application/x-www-form-urlencoded
-      parameters:
-      - description: Authentication token (e.g., Bearer <token>)
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: ARGS
-        in: query
-        name: ARGS
-        type: string
-      produces:
-      - text/plain
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      tags:
-      - rocinante
-  /api/v1/rocinante/sysctl:
-    post:
-      consumes:
-      - application/x-www-form-urlencoded
-      parameters:
-      - description: Authentication token (e.g., Bearer <token>)
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: args
-        in: query
-        name: args
-        type: string
-      produces:
-      - text/plain
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      tags:
-      - rocinante
-  /api/v1/rocinante/sysrc:
-    post:
-      consumes:
-      - application/x-www-form-urlencoded
-      parameters:
-      - description: Authentication token (e.g., Bearer <token>)
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: args
-        in: query
-        name: args
-        type: string
-      produces:
-      - text/plain
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      tags:
-      - rocinante
-  /api/v1/rocinante/template:
-    post:
-      consumes:
-      - application/x-www-form-urlencoded
-      parameters:
-      - description: Authentication token (e.g., Bearer <token>)
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: options
-        in: query
-        name: options
-        type: string
-      - description: action
-        in: query
-        name: action
-        type: string
-      - description: template
-        in: query
-        name: template
-        type: string
-      - description: args
-        in: query
-        name: args
-        type: string
-      produces:
-      - text/plain
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      tags:
-      - rocinante
-  /api/v1/rocinante/update:
-    post:
-      consumes:
-      - application/x-www-form-urlencoded
-      parameters:
-      - description: Authentication token (e.g., Bearer <token>)
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: args
-        in: query
-        name: args
-        type: string
-      produces:
-      - text/plain
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      tags:
-      - rocinante
-  /api/v1/rocinante/upgrade:
-    post:
-      consumes:
-      - application/x-www-form-urlencoded
-      parameters:
-      - description: Authentication token (e.g., Bearer <token>)
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: args
-        in: query
-        name: args
-        type: string
-      produces:
-      - text/plain
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      tags:
-      - rocinante
-  /api/v1/rocinante/verify:
-    post:
-      consumes:
-      - application/x-www-form-urlencoded
-      parameters:
-      - description: Authentication token (e.g., Bearer <token>)
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: options
-        in: query
-        name: options
-        type: string
-      - description: template
-        in: query
-        name: template
-        type: string
-      produces:
-      - text/plain
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      tags:
-      - rocinante
-  /api/v1/rocinante/zfs:
-    post:
-      consumes:
-      - application/x-www-form-urlencoded
-      parameters:
-      - description: Authentication token (e.g., Bearer <token>)
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: args
-        in: query
-        name: args
-        type: string
-      produces:
-      - text/plain
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      tags:
-      - rocinante
-  /api/v1/rocinante/zpool:
-    post:
-      consumes:
-      - application/x-www-form-urlencoded
-      parameters:
-      - description: Authentication token (e.g., Bearer <token>)
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: args
-        in: query
-        name: args
-        type: string
-      produces:
-      - text/plain
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      tags:
-      - rocinante
 swagger: "2.0"
