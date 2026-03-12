@@ -95,96 +95,27 @@ func ValidateBastilleCommandParameters(c *gin.Context, cmdArgs []string) error {
 	return nil
 }
 
-func ValidateRocinanteCommandParameters(c *gin.Context, cmdArgs []string) error {
-
-	logRequest("debug", "ValidateRocinanteCommandParameters", c, cmdArgs, nil)
-
-	query := c.Request.URL.Query()
-	cmdName := cmdArgs[0]
-
-	var subcmd *RocinanteCommandStruct
-	for _, cmd := range rocinanteSpec.Commands {
-		if cmd.Command == cmdName {
-			subcmd = &cmd
-			break
-		}
-	}
-
-	paramsMap := make(map[string]struct{})
-	for _, p := range subcmd.Parameters {
-		paramsMap[strings.ToLower(p)] = struct{}{}
-	}
-
-	for param := range query {
-		if _, ok := paramsMap[strings.ToLower(param)]; !ok {
-			err := fmt.Errorf("invalid parameter %q for command %q", param, cmdName)
-			logRequest("error", "invalid parameter", c, cmdArgs, err.Error())
-			return err
-		}
-	}
-
-	optionsValueMap := make(map[string]interface{})
-	for _, opt := range subcmd.Options {
-		if opt.SFlag != "" {
-			optionsValueMap[opt.SFlag] = opt.Value
-		}
-		if opt.LFlag != "" {
-			optionsValueMap[opt.LFlag] = opt.Value
-		}
-	}
-
-	optionsParam := query.Get("options")
-	if optionsParam != "" {
-		optionsParam = strings.ReplaceAll(optionsParam, "+", " ")
-		opts := strings.Fields(optionsParam)
-
-		for i := 0; i < len(opts); i++ {
-			arg := opts[i]
-			if _, ok := optionsValueMap[arg]; !ok {
-				err := fmt.Errorf("invalid option %q for command %q", arg, cmdName)
-				logRequest("error", "invalid option", c, cmdArgs, err.Error())
-				return err
-			}
-			i++
-		}
-	}
-
-	logRequest("debug", "command validated", c, cmdArgs, nil)
-
-	return nil
-}
-
 // Return command options and parameters GET
 // @Description Return supported options and parameters for any command
 // @Tags spec
 // @Accept application/x-www-form-urlencoded
 // @Produce json
-// @Param Authorization header string true "Authentication token (e.g., Bearer <token>)"
-// @Param software path string true "Software name (either 'bastille' or 'rocinante')"
+// @Param Authorization-ID header string true "API Key ID/Name (eg: bastille-key)"
+// @Param Authorization header string true "Authorization Header (eg: Bearer <api-token>)"
 // @Param command path string true "Command name"
 // @Success 200 {object} interface{} "Command specs for the requested command"
-// @Router /api/v1/{software}/{command} [get]
-func GetCommandSpec(cmdName, software string) gin.HandlerFunc {
+// @Router /api/v1/bastille/{command} [get]
+func GetCommandSpec(cmdName string) gin.HandlerFunc {
 
 	return func(c *gin.Context) {
 
 		logRequest("debug", "GetCommandSpec", c, cmdName, nil)
 
 		var cmd interface{}
-		switch software {
-		case "bastille":
-			for _, sc := range bastilleSpec.Commands {
-				if sc.Command == cmdName {
-					cmd = sc
-					break
-				}
-			}
-		case "rocinante":
-			for _, sc := range rocinanteSpec.Commands {
-				if sc.Command == cmdName {
-					cmd = sc
-					break
-				}
+		for _, sc := range bastilleSpec.Commands {
+			if sc.Command == cmdName {
+				cmd = sc
+				break
 			}
 		}
 

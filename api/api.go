@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//go:embed bastille.json rocinante.json
+//go:embed bastille.json
 var specSheets embed.FS
 
 // @title BastilleBSD-API
@@ -50,7 +50,6 @@ func Start(config string, port string) {
 	addr := fmt.Sprintf("%s:%s", bindAddr, Port)
 
 	loadBastilleSpec()
-	loadRocinanteSpec()
 
 	router := gin.New()
 	loadRoutes(router)

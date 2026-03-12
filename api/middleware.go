@@ -152,8 +152,6 @@ func apiKeyMiddleware(scope string, action string) gin.HandlerFunc {
 		switch scope {
 		case "bastille":
 			allowed = keyData.Permissions.Bastille
-		case "rocinante":
-			allowed = keyData.Permissions.Rocinante
 		case "admin":
 			allowed = keyData.Permissions.Admin
 		}
