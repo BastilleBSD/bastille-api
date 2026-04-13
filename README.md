@@ -13,6 +13,8 @@ the `destroy` example below.
 Run the following command to install the API server.
 
 ```shell
+git clone https://github.com/BastilleBSD/bastille-api
+cd bastille-api
 make install
 cp /usr/local/etc/bastille-api/config.json.sample /usr/local/etc/bastille-api/config.json
 sysrc bastille_api_enable=YES
