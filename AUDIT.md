@@ -219,6 +219,18 @@ Other items:
   an invalid extra token — those two actions were effectively broken. The other actions
   (`add`/`remove`/`clear`/`reset`/`stats`) were unaffected. **Fixed:** the `list`/`show` branch now
   appends only the optional literal `active`. Regression test added.
+- **Bug2 — `zfs unjail` reads the wrong parameter.** The CLI grammar is
+  `zfs TARGET unjail pool/dataset` — the argument is a **dataset**. `BastilleZfsHandler`'s `unjail`
+  case required and appended the `jail_path` query parameter instead of `dataset` (the adjacent
+  `jail` case correctly uses `dataset`). A caller sending `dataset=...` as documented got
+  "Missing jail_path parameter", so the endpoint was unusable as intended. **Fixed:** `unjail` now
+  reads `dataset`. Note this is an API-facing parameter change for that one action.
+- **Minor (over-permissive input, not fixed) —** two handlers accept input the CLI grammar does not
+  use, which can produce a malformed command only when the caller supplies the extra field:
+  `config` appends a `value` for the `get`/`remove` actions (CLI: `get|remove PROPERTY`, no value);
+  and `zfs`/`network` fall through to an incomplete command on an empty/unknown `action` (returning a
+  500 from the failed CLI invocation rather than a 400). Both are validation-hardening opportunities,
+  not default-path breakage.
 
 ---
 
@@ -265,6 +277,7 @@ Other items:
 | Mn2 | — | Maintainability | No tests |
 | Mn3 | — | Maintainability | Ignored spec-load error → nil-deref panics |
 | Bug1 | 🟡 Medium | Correctness | `limits` list/show double-appends action token (**fixed**) |
+| Bug2 | 🟡 Medium | Correctness | `zfs unjail` reads `jail_path` instead of `dataset` (**fixed**) |
 | E1 | 🟠 High | Efficiency | Global mutex serializes all requests |
 | E2 | 🟠 High | Efficiency | No exec timeout → possible permanent deadlock |
 | E3 | — | Efficiency | Output fully buffered; no streaming |

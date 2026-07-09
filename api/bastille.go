@@ -1891,13 +1891,17 @@ func BastilleZfsHandler(c *gin.Context) {
 		}
 		cmdArgs = append(cmdArgs, jailPath)
 	case "unjail":
+		// CLI grammar: "zfs TARGET unjail pool/dataset" — the argument is a
+		// dataset, not a jail path. (The `jail` case above correctly uses the
+		// dataset param; unjail previously read jail_path, so the endpoint was
+		// unusable as documented.)
 		cmdArgs = append(cmdArgs, action)
-		if jailPath == "" {
-			c.JSON(http.StatusBadRequest, "Missing jail_path parameter")
-			logRequest("error", "missing jail_path parameter", nil, cmdArgs, nil)
+		if dataset == "" {
+			c.JSON(http.StatusBadRequest, "Missing dataset parameter")
+			logRequest("error", "missing dataset parameter", nil, cmdArgs, nil)
 			return
 		}
-		cmdArgs = append(cmdArgs, jailPath)
+		cmdArgs = append(cmdArgs, dataset)
 	default:
 		c.JSON(http.StatusBadRequest, "Invalid action parameter")
 		logRequest("error", "invalid action parameter", nil, cmdArgs, nil)
