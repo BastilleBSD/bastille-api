@@ -19,6 +19,7 @@ func TestActionBuildArgs(t *testing.T) {
 		// config
 		{"config set with value", "config", "target=j&action=set&property=foo&value=bar", []string{"config", "j", "set", "foo", "bar"}},
 		{"config get without value", "config", "target=j&action=get&property=foo", []string{"config", "j", "get", "foo"}},
+		{"config get ignores value (CLI takes none)", "config", "target=j&action=get&property=foo&value=bar", []string{"config", "j", "get", "foo"}},
 
 		// zfs
 		{"zfs snapshot with tag", "zfs", "target=j&action=snapshot&tag=t1", []string{"zfs", "j", "snapshot", "t1"}},
@@ -31,7 +32,6 @@ func TestActionBuildArgs(t *testing.T) {
 		// network
 		{"network add with ip", "network", "target=j&action=add&iface=e0&ip=1.2.3.4", []string{"network", "j", "add", "e0", "1.2.3.4"}},
 		{"network add without ip", "network", "target=j&action=add&iface=e0", []string{"network", "j", "add", "e0"}},
-		{"network no action -> just target", "network", "target=j", []string{"network", "j"}},
 
 		// rdr
 		{"rdr default redirect", "rdr", "target=j&protocol=tcp&host_port=80&jail_port=8080", []string{"rdr", "j", "tcp", "80", "8080"}},
@@ -101,6 +101,8 @@ func TestActionBuildBadRequests(t *testing.T) {
 		{"etcupdate", "target=j", "Missing action parameter"},
 		{"upgrade", "target=j", "Missing new_release parameter"},
 		{"network", "action=add&iface=e0", "Missing target parameter"},
+		{"network", "target=j", "Invalid action parameter"},          // empty action no longer falls through
+		{"network", "target=j&action=bogus", "Invalid action parameter"},
 	}
 
 	for _, tc := range cases {

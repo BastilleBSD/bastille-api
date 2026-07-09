@@ -112,10 +112,11 @@ var actionCommands = map[string]actionCommand{
 	"config": {
 		prefix: []paramSpec{req("target")},
 		branches: map[string][]argItem{
+			// CLI: set|add PROPERTY [VALUE]; get|remove PROPERTY (no value).
 			"set":    {lit("set"), arg(req("property")), arg(opt("value"))},
 			"add":    {lit("add"), arg(req("property")), arg(opt("value"))},
-			"get":    {lit("get"), arg(req("property")), arg(opt("value"))},
-			"remove": {lit("remove"), arg(req("property")), arg(opt("value"))},
+			"get":    {lit("get"), arg(req("property"))},
+			"remove": {lit("remove"), arg(req("property"))},
 		},
 	},
 
@@ -147,7 +148,8 @@ var actionCommands = map[string]actionCommand{
 			"add":    {lit("add"), arg(req("iface")), arg(opt("ip"))},
 			"remove": {lit("remove"), arg(req("iface"))},
 		},
-		defaultBranch: []argItem{}, // unknown action: just the target, no error
+		// No defaultBranch: the CLI has only add/remove forms, so an empty or
+		// unknown action is a 400 rather than an incomplete `network TARGET`.
 	},
 
 	"rdr": {
