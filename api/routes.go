@@ -23,9 +23,10 @@ func loadRoutes(router *gin.Engine) {
 	bastilleLive := v1.Group("/bastille/live")
 	bastilleConsole := v1.Group("/bastille/console/ttyd")
 
-	// use the following to require auth
-	// bastilleConsole.Any("/*any", apiKeyMiddleware("bastille", "console"), consoleProxy("http://localhost:7681"))
-	bastilleConsole.Any("/*any", consoleProxy("http://localhost:7681"))
+	// The console proxy exposes a live, writable root terminal (ttyd -W) into a
+	// jail. It MUST be authenticated; an unauthenticated route here is a remote
+	// root shell for anyone who can reach the listener.
+	bastilleConsole.Any("/*any", apiKeyMiddleware("bastille", "console"), consoleProxy("http://localhost:7681"))
 
 	for path, handler := range bastilleRoutes() {
 		bastille.GET("/"+path, apiKeyMiddleware("bastille", path), GetCommandSpec(path))
