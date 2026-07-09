@@ -43,31 +43,28 @@ func buildHandler() http.Handler {
 }
 
 func bastilleRoutes() map[string]HandlerFunc {
-	// Branchy commands with conditional argument grammars remain hand-written
-	// (see bastille.go). Everything else is generated from declarativeCommands.
+	// Two commands keep bespoke handlers: `mount` (all-or-nothing optional
+	// group) and `limits` (a quirky double-append preserved verbatim). Every
+	// other command is generated from a spec — flat ones from
+	// declarativeCommands, branchy ones from actionCommands.
 	routes := map[string]HandlerFunc{
-		"bootstrap": BastilleBootstrapHandler,
-		"config":    BastilleConfigHandler,
-		"console":   BastilleConsoleHandler,
-		"etcupdate": BastilleEtcupdateHandler,
-		"limits":    BastilleLimitsHandler,
-		"monitor":   BastilleMonitorHandler,
-		"mount":     BastilleMountHandler,
-		"network":   BastilleNetworkHandler,
-		"rdr":       BastilleRdrHandler,
-		"setup":     BastilleSetupHandler,
-		"tags":      BastilleTagsHandler,
-		"template":  BastilleTemplateHandler,
-		"upgrade":   BastilleUpgradeHandler,
-		"zfs":       BastilleZfsHandler,
+		"limits": BastilleLimitsHandler,
+		"mount":  BastilleMountHandler,
+	}
+
+	register := func(command string, handler HandlerFunc) {
+		if _, exists := routes[command]; exists {
+			// A command must not be defined more than once.
+			panic("bastille command declared twice: " + command)
+		}
+		routes[command] = handler
 	}
 
 	for command, spec := range declarativeCommands {
-		if _, exists := routes[command]; exists {
-			// A command must not be defined both ways.
-			panic("bastille command declared twice: " + command)
-		}
-		routes[command] = declarativeHandler(command, spec)
+		register(command, declarativeHandler(command, spec))
+	}
+	for command, spec := range actionCommands {
+		register(command, actionHandler(command, spec))
 	}
 
 	return routes

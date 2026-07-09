@@ -80,6 +80,11 @@ var declarativeCommands = map[string]commandSpec{
 
 	// options with a server-injected flag (bastille convert always runs -ay)
 	"convert": {extraArgs: []string{"-ay"}, params: []paramSpec{req("target"), opt("release")}},
+
+	// flat commands that happen to read differently-named params
+	"bootstrap": {params: []paramSpec{req("url")}},
+	"console":   {params: []paramSpec{req("target"), opt("user")}},
+	"setup":     {params: []paramSpec{opt("item"), opt("args")}},
 }
 
 // build constructs the CLI argument vector from the request query. The order
