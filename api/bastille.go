@@ -827,10 +827,12 @@ func BastilleLimitsHandler(c *gin.Context) {
 	case "clear", "reset", "stats":
 		// just append the action
 	case "list", "show":
+		// The action token was already appended above. CLI grammar is
+		// "TARGET list|show [active]", so only the optional literal "active"
+		// belongs here. (Previously this re-appended the action, producing
+		// "list list [active]".)
 		if args == "active" {
-			cmdArgs = append(cmdArgs, action, args)
-		} else {
-			cmdArgs = append(cmdArgs, action)
+			cmdArgs = append(cmdArgs, args)
 		}
 	}
 

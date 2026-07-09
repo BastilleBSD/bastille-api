@@ -210,6 +210,16 @@ Other items:
   `go build -o ... .` so the whole module builds properly.
 - **Unnecessarily-exported mutable globals** (`Host`, `Port`, `APIURL` in `api/config.go`).
 
+### Correctness bugs
+
+- **Bug1 — `limits` `list`/`show` double-appends the action token.** In
+  `BastilleLimitsHandler`, `action` is appended unconditionally, then the `list`/`show` case appends
+  it **again**, producing `bastille limits TARGET list list [active]`. The documented CLI grammar is
+  `TARGET list|show [active]` (`bastille limits -h`), so the `list` and `show` actions were emitting
+  an invalid extra token — those two actions were effectively broken. The other actions
+  (`add`/`remove`/`clear`/`reset`/`stats`) were unaffected. **Fixed:** the `list`/`show` branch now
+  appends only the optional literal `active`. Regression test added.
+
 ---
 
 ## [3] Efficiency & Scalability
@@ -254,6 +264,7 @@ Other items:
 | Mn1 | — | Maintainability | ~1,900 lines of duplicated handler boilerplate |
 | Mn2 | — | Maintainability | No tests |
 | Mn3 | — | Maintainability | Ignored spec-load error → nil-deref panics |
+| Bug1 | 🟡 Medium | Correctness | `limits` list/show double-appends action token (**fixed**) |
 | E1 | 🟠 High | Efficiency | Global mutex serializes all requests |
 | E2 | 🟠 High | Efficiency | No exec timeout → possible permanent deadlock |
 | E3 | — | Efficiency | Output fully buffered; no streaming |
