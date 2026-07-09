@@ -32,6 +32,57 @@ func compareHash(inputHash, storedHash string) bool {
 	return subtle.ConstantTimeCompare(inputBytes, storedBytes) == 1
 }
 
+// defaultAPIKey is the well-known key value historically shipped in the sample
+// config. Any config still containing it is treated as insecure.
+const defaultAPIKey = "bastille-api-key"
+
+// hasDefaultCredential reports whether the config contains a key whose secret is
+// the shipped default value (regardless of the salt it was hashed with).
+func hasDefaultCredential(c *ConfigStruct) bool {
+	if c == nil {
+		return false
+	}
+	for _, k := range c.APIKeys {
+		if generateHash(defaultAPIKey, k.Salt) == k.Hash {
+			return true
+		}
+	}
+	return false
+}
+
+// generateToken returns a cryptographically-random 256-bit hex token, suitable
+// for use as an API key secret.
+func generateToken() (string, error) {
+	raw := make([]byte, 32)
+	if _, err := rand.Read(raw); err != nil {
+		return "", err
+	}
+	return hex.EncodeToString(raw), nil
+}
+
+// generateBootstrapKey builds a fresh admin-capable key with a random secret. The
+// caller is responsible for persisting the entry and surfacing the plaintext
+// secret to the operator exactly once.
+func generateBootstrapKey() (id, secret string, entry APIKeyStruct, err error) {
+	secret, err = generateToken()
+	if err != nil {
+		return "", "", APIKeyStruct{}, err
+	}
+	salt, err := generateSalt()
+	if err != nil {
+		return "", "", APIKeyStruct{}, err
+	}
+	entry = APIKeyStruct{
+		Salt: salt,
+		Hash: generateHash(secret, salt),
+		Permissions: PermissionsStruct{
+			Bastille: []string{"*"},
+			Admin:    []string{"*"},
+		},
+	}
+	return "bootstrap", secret, entry, nil
+}
+
 func validateParameters(scope string, permissions []string, c *gin.Context) error {
 
     supportedParams := []string{"scope", "permissions"}
