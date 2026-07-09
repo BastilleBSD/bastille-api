@@ -6,7 +6,6 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/gin-gonic/gin"
 )
 
 var bastilleLock sync.Mutex
@@ -61,12 +60,12 @@ func BastilleCommandLive(args ...string) (string, error) {
 	return "/api/v1/bastille/console/ttyd", nil
 }
 
-func ParseAndRunBastilleCommand(c *gin.Context, cmdArgs []string) {
+func ParseAndRunBastilleCommand(c *Ctx, cmdArgs []string) {
 
 	logRequest("debug", "ParseAndRunBastilleCommand", c, cmdArgs, nil)
 
 	if err := ValidateBastilleCommandParameters(c, cmdArgs); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, H{"error": err.Error()})
 		logRequest("error", "parameter validation failed", c, cmdArgs, err)
 		return
 	}
@@ -82,14 +81,14 @@ func ParseAndRunBastilleCommand(c *gin.Context, cmdArgs []string) {
 	}
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, H{"error": err.Error()})
 		logRequest("error", "command failed", c, cmdArgs, err)
 		return
 	}
 
 	if isLive {
 		c.Header("X-TTYD-Url", result)
-		c.JSON(http.StatusOK, gin.H{"path": result})
+		c.JSON(http.StatusOK, H{"path": result})
 		logRequest("info", "success (live)", c, cmdArgs, result)
 	} else {
 		c.String(http.StatusOK, result)
@@ -109,7 +108,7 @@ func ParseAndRunBastilleCommand(c *gin.Context, cmdArgs []string) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/bootstrap [post]
-func BastilleBootstrapHandler(c *gin.Context) {
+func BastilleBootstrapHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleBootstrapHandler", c, nil, nil)
 
@@ -121,7 +120,7 @@ func BastilleBootstrapHandler(c *gin.Context) {
 		cmdArgs = append(cmdArgs, strings.Fields(options)...)
 	}
 	if url == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing url parameter"})
+		c.JSON(http.StatusBadRequest, H{"error": "Missing url parameter"})
 		logRequest("error", "missing url parameter", c, cmdArgs, nil)
 		return
 	}
@@ -143,7 +142,7 @@ func BastilleBootstrapHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/clone [post]
-func BastilleCloneHandler(c *gin.Context) {
+func BastilleCloneHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleCloneHandler", c, nil, nil)
 
@@ -157,21 +156,21 @@ func BastilleCloneHandler(c *gin.Context) {
 		cmdArgs = append(cmdArgs, strings.Fields(options)...)
 	}
 	if target == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing target parameter"})
+		c.JSON(http.StatusBadRequest, H{"error": "Missing target parameter"})
 		logRequest("error", "missing target parameter", c, cmdArgs, nil)
 		return
 	}
 	cmdArgs = append(cmdArgs, target)
 
 	if new_name == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing new_name parameter"})
+		c.JSON(http.StatusBadRequest, H{"error": "Missing new_name parameter"})
 		logRequest("error", "missing new_name parameter", c, cmdArgs, nil)
 		return
 	}
 	cmdArgs = append(cmdArgs, new_name)
 
 	if ip == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing ip parameter"})
+		c.JSON(http.StatusBadRequest, H{"error": "Missing ip parameter"})
 		logRequest("error", "missing ip parameter", c, cmdArgs, nil)
 		return
 	}
@@ -192,7 +191,7 @@ func BastilleCloneHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/cmd [post]
-func BastilleCmdHandler(c *gin.Context) {
+func BastilleCmdHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleCmdHandler", c, nil, nil)
 
@@ -205,14 +204,14 @@ func BastilleCmdHandler(c *gin.Context) {
 		cmdArgs = append(cmdArgs, strings.Fields(options)...)
 	}
 	if target == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing target parameter"})
+		c.JSON(http.StatusBadRequest, H{"error": "Missing target parameter"})
 		logRequest("error", "missing target parameter", c, cmdArgs, nil)
 		return
 	}
 	cmdArgs = append(cmdArgs, target)
 
 	if command == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing command parameter"})
+		c.JSON(http.StatusBadRequest, H{"error": "Missing command parameter"})
 		logRequest("error", "missing command parameter", c, cmdArgs, nil)
 		return
 	}
@@ -235,7 +234,7 @@ func BastilleCmdHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/config [post]
-func BastilleConfigHandler(c *gin.Context) {
+func BastilleConfigHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleConfigHandler", c, nil, nil)
 
@@ -250,21 +249,21 @@ func BastilleConfigHandler(c *gin.Context) {
 		cmdArgs = append(cmdArgs, strings.Fields(options)...)
 	}
 	if target == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing target parameter"})
+		c.JSON(http.StatusBadRequest, H{"error": "Missing target parameter"})
 		logRequest("error", "missing target parameter", c, cmdArgs, nil)
 		return
 	}
 	cmdArgs = append(cmdArgs, target)
 
 	if action != "set" && action != "add" && action != "get" && action != "remove" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Unknown action parameter"})
+		c.JSON(http.StatusBadRequest, H{"error": "Unknown action parameter"})
 		logRequest("error", "unknown action parameter", c, cmdArgs, nil)
 		return
 	}
 	cmdArgs = append(cmdArgs, action)
 
 	if property == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing property parameter"})
+		c.JSON(http.StatusBadRequest, H{"error": "Missing property parameter"})
 		logRequest("error", "missing property parameter", c, cmdArgs, nil)
 		return
 	}
@@ -289,7 +288,7 @@ func BastilleConfigHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/console [post]
-func BastilleConsoleHandler(c *gin.Context) {
+func BastilleConsoleHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleConsoleHandler", c, nil, nil)
 
@@ -302,7 +301,7 @@ func BastilleConsoleHandler(c *gin.Context) {
 		cmdArgs = append(cmdArgs, strings.Fields(options)...)
 	}
 	if target == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing target parameter"})
+		c.JSON(http.StatusBadRequest, H{"error": "Missing target parameter"})
 		logRequest("error", "missing target parameter", c, cmdArgs, nil)
 		return
 	}
@@ -327,7 +326,7 @@ func BastilleConsoleHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/convert [post]
-func BastilleConvertHandler(c *gin.Context) {
+func BastilleConvertHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleConvertHandler", c, nil, nil)
 
@@ -344,7 +343,7 @@ func BastilleConvertHandler(c *gin.Context) {
 	}
 
 	if target == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing target parameter"})
+		c.JSON(http.StatusBadRequest, H{"error": "Missing target parameter"})
 		logRequest("error", "missing target parameter", c, cmdArgs, nil)
 		return
 	}
@@ -370,7 +369,7 @@ func BastilleConvertHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/cp [post]
-func BastilleCpHandler(c *gin.Context) {
+func BastilleCpHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleCpHandler", c, nil, nil)
 
@@ -384,21 +383,21 @@ func BastilleCpHandler(c *gin.Context) {
 		cmdArgs = append(cmdArgs, strings.Fields(options)...)
 	}
 	if target == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing target parameter"})
+		c.JSON(http.StatusBadRequest, H{"error": "Missing target parameter"})
 		logRequest("error", "missing target parameter", c, cmdArgs, nil)
 		return
 	}
 	cmdArgs = append(cmdArgs, target)
 
 	if host_path == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing host_path parameter"})
+		c.JSON(http.StatusBadRequest, H{"error": "Missing host_path parameter"})
 		logRequest("error", "missing host_path parameter", c, cmdArgs, nil)
 		return
 	}
 	cmdArgs = append(cmdArgs, host_path)
 
 	if jail_path == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing jail_path parameter"})
+		c.JSON(http.StatusBadRequest, H{"error": "Missing jail_path parameter"})
 		logRequest("error", "missing jail_path parameter", c, cmdArgs, nil)
 		return
 	}
@@ -421,7 +420,7 @@ func BastilleCpHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/create [post]
-func BastilleCreateHandler(c *gin.Context) {
+func BastilleCreateHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleCreateHandler", nil, nil, nil)
 
@@ -472,7 +471,7 @@ func BastilleCreateHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/destroy [post]
-func BastilleDestroyHandler(c *gin.Context) {
+func BastilleDestroyHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleDestroyHandler", nil, nil, nil)
 
@@ -506,7 +505,7 @@ func BastilleDestroyHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/edit [post]
-func BastilleEditHandler(c *gin.Context) {
+func BastilleEditHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleEditHandler", nil, nil, nil)
 
@@ -545,7 +544,7 @@ func BastilleEditHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/etcupdate [post]
-func BastilleEtcupdateHandler(c *gin.Context) {
+func BastilleEtcupdateHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleEtcupdateHandler", nil, nil, nil)
 
@@ -606,7 +605,7 @@ func BastilleEtcupdateHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/export [post]
-func BastilleExportHandler(c *gin.Context) {
+func BastilleExportHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleExportHandler", nil, nil, nil)
 
@@ -643,7 +642,7 @@ func BastilleExportHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/htop [post]
-func BastilleHtopHandler(c *gin.Context) {
+func BastilleHtopHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleHtopHandler", nil, nil, nil)
 
@@ -677,7 +676,7 @@ func BastilleHtopHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/import [post]
-func BastilleImportHandler(c *gin.Context) {
+func BastilleImportHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleImportHandler", nil, nil, nil)
 
@@ -717,7 +716,7 @@ func BastilleImportHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/jcp [post]
-func BastilleJcpHandler(c *gin.Context) {
+func BastilleJcpHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleJcpHandler", nil, nil, nil)
 
@@ -775,7 +774,7 @@ func BastilleJcpHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/limits [post]
-func BastilleLimitsHandler(c *gin.Context) {
+func BastilleLimitsHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleLimitsHandler", nil, nil, nil)
 
@@ -848,7 +847,7 @@ func BastilleLimitsHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/list [post]
-func BastilleListHandler(c *gin.Context) {
+func BastilleListHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleListHandler", nil, nil, nil)
 
@@ -879,7 +878,7 @@ func BastilleListHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/migrate [post]
-func BastilleMigrateHandler(c *gin.Context) {
+func BastilleMigrateHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleMigrateHandler", nil, nil, nil)
 
@@ -921,7 +920,7 @@ func BastilleMigrateHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/monitor [post]
-func BastilleMonitorHandler(c *gin.Context) {
+func BastilleMonitorHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleMonitorHandler", nil, nil, nil)
 
@@ -980,7 +979,7 @@ func BastilleMonitorHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/mount [post]
-func BastilleMountHandler(c *gin.Context) {
+func BastilleMountHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleMountHandler", nil, nil, nil)
 
@@ -1043,7 +1042,7 @@ func BastilleMountHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/network [post]
-func BastilleNetworkHandler(c *gin.Context) {
+func BastilleNetworkHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleNetworkHandler", nil, nil, nil)
 
@@ -1099,7 +1098,7 @@ func BastilleNetworkHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/pkg [post]
-func BastillePkgHandler(c *gin.Context) {
+func BastillePkgHandler(c *Ctx) {
 
 	logRequest("debug", "BastillePkgHandler", nil, nil, nil)
 
@@ -1142,7 +1141,7 @@ func BastillePkgHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/rcp [post]
-func BastilleRcpHandler(c *gin.Context) {
+func BastilleRcpHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleRcpHandler", nil, nil, nil)
 
@@ -1196,7 +1195,7 @@ func BastilleRcpHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/rdr [post]
-func BastilleRdrHandler(c *gin.Context) {
+func BastilleRdrHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleRdrHandler", nil, nil, nil)
 
@@ -1269,7 +1268,7 @@ func BastilleRdrHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/rename [post]
-func BastilleRenameHandler(c *gin.Context) {
+func BastilleRenameHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleRenameHandler", nil, nil, nil)
 
@@ -1308,7 +1307,7 @@ func BastilleRenameHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/restart [post]
-func BastilleRestartHandler(c *gin.Context) {
+func BastilleRestartHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleRestartHandler", nil, nil, nil)
 
@@ -1343,7 +1342,7 @@ func BastilleRestartHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/service [post]
-func BastilleServiceHandler(c *gin.Context) {
+func BastilleServiceHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleServiceHandler", nil, nil, nil)
 
@@ -1391,7 +1390,7 @@ func BastilleServiceHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/setup [post]
-func BastilleSetupHandler(c *gin.Context) {
+func BastilleSetupHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleSetupHandler", nil, nil, nil)
 
@@ -1425,7 +1424,7 @@ func BastilleSetupHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/start [post]
-func BastilleStartHandler(c *gin.Context) {
+func BastilleStartHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleStartHandler", nil, nil, nil)
 
@@ -1458,7 +1457,7 @@ func BastilleStartHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/stop [post]
-func BastilleStopHandler(c *gin.Context) {
+func BastilleStopHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleStopHandler", nil, nil, nil)
 
@@ -1492,7 +1491,7 @@ func BastilleStopHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/sysrc [post]
-func BastilleSysrcHandler(c *gin.Context) {
+func BastilleSysrcHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleSysrcHandler", nil, nil, nil)
 
@@ -1534,7 +1533,7 @@ func BastilleSysrcHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/tags [post]
-func BastilleTagsHandler(c *gin.Context) {
+func BastilleTagsHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleTagsHandler", nil, nil, nil)
 
@@ -1589,7 +1588,7 @@ func BastilleTagsHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/template [post]
-func BastilleTemplateHandler(c *gin.Context) {
+func BastilleTemplateHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleTemplateHandler", nil, nil, nil)
 
@@ -1641,7 +1640,7 @@ func BastilleTemplateHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/top [post]
-func BastilleTopHandler(c *gin.Context) {
+func BastilleTopHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleTopHandler", nil, nil, nil)
 
@@ -1675,7 +1674,7 @@ func BastilleTopHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/umount [post]
-func BastilleUmountHandler(c *gin.Context) {
+func BastilleUmountHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleUmountHandler", nil, nil, nil)
 
@@ -1715,7 +1714,7 @@ func BastilleUmountHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/update [post]
-func BastilleUpdateHandler(c *gin.Context) {
+func BastilleUpdateHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleUpdateHandler", nil, nil, nil)
 
@@ -1750,7 +1749,7 @@ func BastilleUpdateHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/upgrade [post]
-func BastilleUpgradeHandler(c *gin.Context) {
+func BastilleUpgradeHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleUpgradeHandler", nil, nil, nil)
 
@@ -1796,7 +1795,7 @@ func BastilleUpgradeHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/verify [post]
-func BastilleVerifyHandler(c *gin.Context) {
+func BastilleVerifyHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleVerifyHandler", nil, nil, nil)
 
@@ -1834,7 +1833,7 @@ func BastilleVerifyHandler(c *gin.Context) {
 // @Produce text/plain
 // @Success 200 {string} string
 // @Router /api/v1/bastille/zfs [post]
-func BastilleZfsHandler(c *gin.Context) {
+func BastilleZfsHandler(c *Ctx) {
 
 	logRequest("debug", "BastilleZfsHandler", nil, nil, nil)
 

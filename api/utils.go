@@ -6,10 +6,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/gin-gonic/gin"
 )
 
-func ValidateBastilleCommandParameters(c *gin.Context, cmdArgs []string) error {
+func ValidateBastilleCommandParameters(c *Ctx, cmdArgs []string) error {
 
 	logRequest("debug", "ValidateBastilleCommandParameters", c, cmdArgs, nil)
 
@@ -105,9 +104,9 @@ func ValidateBastilleCommandParameters(c *gin.Context, cmdArgs []string) error {
 // @Param command path string true "Command name"
 // @Success 200 {object} interface{} "Command specs for the requested command"
 // @Router /api/v1/bastille/{command} [get]
-func GetCommandSpec(cmdName string) gin.HandlerFunc {
+func GetCommandSpec(cmdName string) HandlerFunc {
 
-	return func(c *gin.Context) {
+	return func(c *Ctx) {
 
 		logRequest("debug", "GetCommandSpec", c, cmdName, nil)
 

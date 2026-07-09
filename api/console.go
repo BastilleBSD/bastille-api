@@ -7,19 +7,18 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/gin-gonic/gin"
 )
 
-func consoleProxy(target string) gin.HandlerFunc {
+func consoleProxy(target string) HandlerFunc {
 
 	logRequest("debug", "consoleProxy", nil, nil, nil)
 
-	return func(c *gin.Context) {
+	return func(c *Ctx) {
 
 		remote, err := url.Parse(target)
 
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid target URL"})
+			c.JSON(http.StatusInternalServerError, H{"error": "Invalid target URL"})
 			logRequest("error", "invalid target url", c, nil, err.Error())
 			return
 		}
@@ -28,7 +27,7 @@ func consoleProxy(target string) gin.HandlerFunc {
 		conn, err := net.DialTimeout("tcp", remote.Host, timeout)
 		
 		if err != nil {
-			c.JSON(http.StatusServiceUnavailable, gin.H{"error":  "TTYD not reachable"})
+			c.JSON(http.StatusServiceUnavailable, H{"error":  "TTYD not reachable"})
 			logRequest("error", "ttyd not reachable", c, nil, err.Error())
 			return
 		}
@@ -43,7 +42,7 @@ func consoleProxy(target string) gin.HandlerFunc {
 		}
 
 		proxy.ErrorHandler = func(w http.ResponseWriter, r *http.Request, err error) {
-			c.JSON(http.StatusBadGateway, gin.H{"error": "TTYD connection lost"})
+			c.JSON(http.StatusBadGateway, H{"error": "TTYD connection lost"})
 			logRequest("error", "ttyd connection lost", c, nil, err.Error())
 		}
 

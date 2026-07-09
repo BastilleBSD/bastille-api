@@ -7,8 +7,6 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
-
-	"github.com/gin-gonic/gin"
 )
 
 // redactHeaders must strip every credential-bearing header while leaving benign
@@ -49,9 +47,10 @@ func TestInfoLogOmitsQueryString(t *testing.T) {
 	var buf bytes.Buffer
 	logger = slog.New(slog.NewJSONHandler(&buf, &slog.HandlerOptions{Level: slog.LevelDebug}))
 
-	gin.SetMode(gin.TestMode)
-	c, _ := gin.CreateTestContext(httptest.NewRecorder())
-	c.Request = httptest.NewRequest(http.MethodGet, "/api/v1/bastille/cmd?target=jail&command=cat+/etc/master.passwd", nil)
+	c := &Ctx{
+		Writer:  httptest.NewRecorder(),
+		Request: httptest.NewRequest(http.MethodGet, "/api/v1/bastille/cmd?target=jail&command=cat+/etc/master.passwd", nil),
+	}
 
 	logRequest("info", "request", c, nil, nil)
 

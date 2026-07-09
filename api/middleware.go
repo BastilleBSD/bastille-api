@@ -5,8 +5,6 @@ import (
 	"net/http"
 	"os"
 	"strings"
-
-	"github.com/gin-gonic/gin"
 )
 
 var logger *slog.Logger
@@ -40,10 +38,8 @@ func InitLogger(debug bool) {
 
 	if debug {
 		level = slog.LevelDebug
-		gin.SetMode(gin.DebugMode)
 	} else {
 		level = slog.LevelInfo
-		gin.SetMode(gin.ReleaseMode)
 	}
 
 	logger = slog.New(
@@ -55,7 +51,7 @@ func InitLogger(debug bool) {
 	slog.SetDefault(logger)
 }
 
-func logRequest(level string, msg string, c *gin.Context, cmdArgs any, err any) {
+func logRequest(level string, msg string, c *Ctx, cmdArgs any, err any) {
 
 	switch level {
 	case "info":
@@ -96,7 +92,6 @@ func logRequest(level string, msg string, c *gin.Context, cmdArgs any, err any) 
 			attrs = append(attrs,
 				"method", c.Request.Method,
 				"path", c.Request.URL.Path,
-				"query", c.Request.URL.RawQuery,
 				"remote", c.ClientIP(),
 			)
 		}
@@ -107,31 +102,37 @@ func logRequest(level string, msg string, c *gin.Context, cmdArgs any, err any) 
 	}
 }
 
-func CORSMiddleware() gin.HandlerFunc {
+// corsMiddleware is a standard-library HTTP wrapper that applies CORS headers to
+// every response and short-circuits preflight OPTIONS requests.
+func corsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, Authorization-ID, X-TTYD-Url, X-API-Key, X-API-Key-ID")
+		w.Header().Set("Access-Control-Expose-Headers", "X-TTYD-Url")
 
-	logRequest("debug", "CORSMiddleware", nil, nil, nil)
-
-	return func(c *gin.Context) {
-		c.Header("Access-Control-Allow-Origin", "*")
-		c.Header("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
-		c.Header("Access-Control-Allow-Headers", "Content-Type, Authorization, Authorization-ID, X-TTYD-Url, X-API-Key, X-API-Key-ID")
-		c.Header("Access-Control-Expose-Headers", "X-TTYD-Url")
-
-		if c.Request.Method == http.MethodOptions {
-			c.Status(http.StatusOK)
-			c.Abort()
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusOK)
 			return
 		}
 
-		c.Next()
-	}
+		next.ServeHTTP(w, r)
+	})
 }
 
-func apiKeyMiddleware(scope string, action string) gin.HandlerFunc {
+// loggingMiddleware is a standard-library HTTP wrapper that logs every request.
+func loggingMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		logRequest("info", "request", &Ctx{Writer: w, Request: r}, nil, nil)
+		next.ServeHTTP(w, r)
+	})
+}
 
-	logRequest("debug", "apiKeyMiddleware", nil, nil, nil)
+// apiKeyMiddleware authenticates the request and authorizes it against the given
+// scope/action, as a chain handler.
+func apiKeyMiddleware(scope string, action string) HandlerFunc {
 
-	return func(c *gin.Context) {
+	return func(c *Ctx) {
 
 		key := c.GetHeader("Authorization")
 		keyID := c.GetHeader("Authorization-ID")
@@ -139,14 +140,14 @@ func apiKeyMiddleware(scope string, action string) gin.HandlerFunc {
 
 		if key == "" || !strings.HasPrefix(key, prefix) {
 			logRequest("error", "missing Authorization header", c, nil, nil)
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+			c.AbortWithStatusJSON(http.StatusUnauthorized, H{
 				"error": "Unauthorized",
 			})
 			return
 		}
 		if keyID == "" {
 			logRequest("error", "missing Authorization-ID header", c, nil, nil)
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+			c.AbortWithStatusJSON(http.StatusUnauthorized, H{
 				"error": "Unauthorized",
 			})
 			return
@@ -157,14 +158,14 @@ func apiKeyMiddleware(scope string, action string) gin.HandlerFunc {
 		keyData, exists := cfg.APIKeys[keyID]
 		if !exists {
 			logRequest("error", "invalid API keyID", c, nil, nil)
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, H{"error": "Unauthorized"})
 			return
 		}
 
 		trialHash := generateHash(providedKey, keyData.Salt)
 
 		if !compareHash(trialHash, keyData.Hash) {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+			c.AbortWithStatusJSON(http.StatusUnauthorized, H{
 				"error": "Unauthorized",
 			})
 			logRequest("error", "key hash mismatch", c, nil, nil)
@@ -189,24 +190,13 @@ func apiKeyMiddleware(scope string, action string) gin.HandlerFunc {
 
 		if !hasPermission {
 			logRequest("error", "forbidden action", c, action, nil)
-			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
-				"error": "Forbidden",
+			c.AbortWithStatusJSON(http.StatusForbidden, H{
+				"error":   "Forbidden",
 				"details": "Requires " + scope + " permission: " + action,
 			})
 			return
 		}
 
-		c.Next()
-	}
-}
-
-// Log all API requests
-func loggingMiddleware() gin.HandlerFunc {
-
-	logRequest("debug", "loggingMiddleware", nil, nil, nil)
-
-	return func(c *gin.Context) {
-		logRequest("info", "request", c, nil, nil)
 		c.Next()
 	}
 }

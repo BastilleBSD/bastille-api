@@ -4,9 +4,9 @@ import (
 	"embed"
 	"fmt"
 	"net"
+	"net/http"
 	"os"
-
-	"github.com/gin-gonic/gin"
+	"time"
 )
 
 //go:embed bastille.json
@@ -65,11 +65,18 @@ func Start(config string, port string) {
 
 	loadBastilleSpec()
 
-	router := gin.New()
-	loadRoutes(router)
+	srv := &http.Server{
+		Addr:    addr,
+		Handler: buildHandler(),
+		// Guard against slowloris header attacks. ReadTimeout/WriteTimeout are
+		// intentionally left unset: command output and the ttyd console proxy
+		// are long-lived and must not be cut off mid-stream.
+		ReadHeaderTimeout: 10 * time.Second,
+		IdleTimeout:       120 * time.Second,
+	}
 
-	logRequest("info", fmt.Sprintf("Starting BastilleBSD API server on %s", addr), nil ,nil, nil)
-	if err := router.Run(addr); err != nil {
+	logRequest("info", fmt.Sprintf("Starting BastilleBSD API server on %s", addr), nil, nil, nil)
+	if err := srv.ListenAndServe(); err != nil {
 		logRequest("error", "Server failed to start", nil, nil, err.Error())
 		os.Exit(1)
 	}

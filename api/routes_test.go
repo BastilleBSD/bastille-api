@@ -4,8 +4,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-
-	"github.com/gin-gonic/gin"
 )
 
 // testKey installs a single API key into the global config and returns the
@@ -30,10 +28,7 @@ func testKey(t *testing.T, id, secret string, bastille, admin []string) (authz, 
 
 func newTestServer(t *testing.T) *httptest.Server {
 	t.Helper()
-	gin.SetMode(gin.TestMode)
-	r := gin.New()
-	loadRoutes(r)
-	srv := httptest.NewServer(r)
+	srv := httptest.NewServer(buildHandler())
 	t.Cleanup(srv.Close)
 	return srv
 }
@@ -88,6 +83,56 @@ func TestConsoleRequiresAuth(t *testing.T) {
 		srv := newTestServer(t)
 		if code := doGet(t, srv, path, authz, authzID); code != http.StatusForbidden {
 			t.Fatalf("console without permission: got %d, want 403", code)
+		}
+	})
+}
+
+// Exercises the stdlib router/shim seams introduced by the Gin removal: method
+// routing, the auth chain on a normal endpoint, the JSON spec response, and the
+// CORS preflight wrapper.
+func TestRouterWiring(t *testing.T) {
+	InitLogger(false)
+	if _, err := loadBastilleSpec(); err != nil {
+		t.Fatalf("loadBastilleSpec: %v", err)
+	}
+	const listPath = "/api/v1/bastille/list"
+
+	t.Run("GET spec with valid auth -> 200", func(t *testing.T) {
+		authz, authzID := testKey(t, "op", "s3cret", []string{"list"}, nil)
+		srv := newTestServer(t)
+		if code := doGet(t, srv, listPath, authz, authzID); code != http.StatusOK {
+			t.Fatalf("GET spec: got %d, want 200", code)
+		}
+	})
+
+	t.Run("POST without auth -> 401", func(t *testing.T) {
+		testKey(t, "op", "s3cret", []string{"list"}, nil)
+		srv := newTestServer(t)
+		req, _ := http.NewRequest(http.MethodPost, srv.URL+listPath, nil)
+		resp, err := srv.Client().Do(req)
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer resp.Body.Close()
+		if resp.StatusCode != http.StatusUnauthorized {
+			t.Fatalf("unauth POST: got %d, want 401", resp.StatusCode)
+		}
+	})
+
+	t.Run("OPTIONS preflight -> 200 with CORS header", func(t *testing.T) {
+		testKey(t, "op", "s3cret", []string{"list"}, nil)
+		srv := newTestServer(t)
+		req, _ := http.NewRequest(http.MethodOptions, srv.URL+listPath, nil)
+		resp, err := srv.Client().Do(req)
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer resp.Body.Close()
+		if resp.StatusCode != http.StatusOK {
+			t.Fatalf("preflight: got %d, want 200", resp.StatusCode)
+		}
+		if got := resp.Header.Get("Access-Control-Allow-Origin"); got != "*" {
+			t.Fatalf("preflight missing CORS header, got %q", got)
 		}
 	})
 }
