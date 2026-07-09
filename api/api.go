@@ -3,6 +3,7 @@ package api
 import (
 	"embed"
 	"fmt"
+	"net"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -40,11 +41,11 @@ func Start(config string, port string) {
 		Port = "8888"
 	}
 
-	if Host == "0.0.0.0" || Host == "localhost" || Host == "" {
-		bindAddr = "0.0.0.0"
-		Host = "localhost"
-	} else {
-		bindAddr = Host
+	bindAddr, Host = resolveBindAddr(Host)
+
+	if !isLoopbackBind(bindAddr) {
+		logRequest("info", fmt.Sprintf("WARNING: binding to non-loopback address %q. "+
+			"TLS and authentication must be handled directly (e.g. a reverse proxy will NOT protect this listener).", bindAddr), nil, nil, nil)
 	}
 
 	addr := fmt.Sprintf("%s:%s", bindAddr, Port)
@@ -59,4 +60,33 @@ func Start(config string, port string) {
 		logRequest("error", "Server failed to start", nil, nil, err.Error())
 		os.Exit(1)
 	}
+}
+
+// resolveBindAddr maps the configured host to the address the server should
+// actually bind, plus a display host for logging.
+//
+// Defaulting is loopback-first: an empty, "localhost" or "127.0.0.1" host binds
+// only the loopback interface so the API stays reachable exclusively from the
+// local machine (the recommended reverse-proxy topology). Exposing the API on
+// all interfaces requires the operator to explicitly set host to "0.0.0.0", and
+// any other value binds that specific address.
+func resolveBindAddr(host string) (bindAddr string, displayHost string) {
+	switch host {
+	case "", "localhost", "127.0.0.1":
+		return "127.0.0.1", "localhost"
+	case "0.0.0.0":
+		return "0.0.0.0", "0.0.0.0"
+	default:
+		return host, host
+	}
+}
+
+// isLoopbackBind reports whether the given bind address is restricted to the
+// local machine.
+func isLoopbackBind(bindAddr string) bool {
+	if bindAddr == "localhost" {
+		return true
+	}
+	ip := net.ParseIP(bindAddr)
+	return ip != nil && ip.IsLoopback()
 }
