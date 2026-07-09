@@ -3,7 +3,6 @@ package api
 import (
 	"net/http"
 
-	_ "bastille-api/docs"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
 
@@ -12,6 +11,9 @@ import (
 func buildHandler() http.Handler {
 	mux := http.NewServeMux()
 
+	// Generate the OpenAPI document from the command schema and serve it via the
+	// swagger UI at /swagger/ (spec at /swagger/doc.json).
+	registerOpenAPISpec()
 	mux.Handle("/swagger/", httpSwagger.WrapHandler)
 
 	// The console proxy exposes a live, writable root terminal (ttyd -W) into a
