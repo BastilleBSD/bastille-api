@@ -1,14 +1,5 @@
 {
-  "host": "localhost",
+  "host": "127.0.0.1",
   "port": "8888",
-  "apiKeys": {
-    "bastille": {
-      "salt": "my-random-salt",
-      "hash": "328de2f095e41086c07746ab22592a6c656045d3a8ff7f0ef1d721760677dea5",
-      "permissions": {
-        "bastille": ["*"],
-        "admin": ["*"]
-      }
-    }
-  }
+  "apiKeys": {}
 }

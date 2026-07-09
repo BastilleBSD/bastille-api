@@ -60,6 +60,26 @@ func loadConfig() (*ConfigStruct, error) {
 	return cfg, nil
 }
 
+// bootstrapFirstKey generates an admin-capable API key, persists it, and logs
+// the plaintext secret exactly once so a fresh install has a way in. It is only
+// called when no keys exist.
+func bootstrapFirstKey() error {
+	id, secret, entry, err := generateBootstrapKey()
+	if err != nil {
+		return err
+	}
+	cfg.APIKeys[id] = entry
+	if err := saveConfig(); err != nil {
+		return err
+	}
+	// Intentional one-time disclosure: the plaintext secret is never stored and
+	// cannot be recovered later.
+	logRequest("info", "No API keys configured; generated a bootstrap key with full "+
+		"permissions. Store it now — it will not be shown again. "+
+		"Authorization-ID: "+id+"  API key: "+secret, nil, nil, nil)
+	return nil
+}
+
 func saveConfig() error {
 
 	logRequest("debug", "saveConfig", nil, nil, nil)

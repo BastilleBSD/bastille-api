@@ -33,6 +33,19 @@ func Start(config string, port string) {
 		os.Exit(1)
 	}
 
+	if hasDefaultCredential(cfg) {
+		logRequest("error", "Refusing to start: the shipped default API key is present in "+
+			"the config. Remove it and create your own key before starting.", nil, nil, nil)
+		os.Exit(1)
+	}
+
+	if len(cfg.APIKeys) == 0 {
+		if err := bootstrapFirstKey(); err != nil {
+			logRequest("error", "Failed to generate bootstrap API key", nil, nil, err.Error())
+			os.Exit(1)
+		}
+	}
+
 	if port != "" {
 		Port = port
 	} else if cfg != nil && cfg.Port != "" {
