@@ -162,6 +162,37 @@ migration must preserve. Rough effort: 1–2 focused days including test updates
 `http.Handler`-native, tiny, and has no heavy transitive deps. Given Go 1.25's ServeMux, prefer pure
 stdlib and add chi only if sub-router sugar is later missed.
 
+#### Prototype results (measured, branch `refactor/drop-gin`)
+
+A working proof-of-concept migration was built and verified. Outcome:
+
+| Metric | Before (Gin) | After (stdlib) | Change |
+|--------|--------------|----------------|--------|
+| Packages in build graph | 152 | 47 | **−69%** |
+| Direct dependencies | 4 (all Gin-family) | swagger tooling only | Gin + `gin-swagger` removed |
+| Source lines | — | — | **−99 net** (incl. the new shim and added tests) |
+| `go.sum` size | — | — | ~120 lines removed |
+
+- **Heavy transitive deps fully pruned:** `bytedance/sonic` (assembly + `unsafe`), `quic-go/http3`,
+  `go.mongodb.org/mongo-driver`, `go-playground/validator`.
+- **How:** a ~150-line dependency-free shim (`api/httpx.go`) reproduces the exact slice of Gin used —
+  a request `Ctx` (`Query`/`GetHeader`/`Header`/`JSON`/`String`/`ClientIP`/`FullPath`) plus a
+  gin-style `Next`/`Abort` middleware chain — so the 40+ handler bodies port over essentially
+  unchanged (a mechanical `*gin.Context → *Ctx`, `gin.H → H` substitution). The framework-coupled
+  pieces (routing via `net/http.ServeMux`, CORS/logging as `func(http.Handler) http.Handler`
+  wrappers, `http.Server` with a `ReadHeaderTimeout` slowloris guard, and swagger via
+  `swaggo/http-swagger/v2`) were rewritten idiomatically.
+- **Verified three ways:** `go build` + `go vet` clean; 21 test cases pass (the Phase 0 guards ported
+  to the new types, plus new router/CORS/spec-endpoint tests); and a live smoke test confirmed boot,
+  one-time key bootstrap, Swagger UI/spec serving, 401 on unauthenticated requests, and CORS
+  preflight.
+- **Sequencing note:** the prototype preceded the schema-driven handler refactor (Mn1). In real
+  execution, combine them — the generic handler consumes `Ctx` and `bastille.go` collapses at the
+  same time.
+
+**Conclusion:** the migration is confirmed feasible and low-risk, and the dependency reduction is
+larger than estimated. Recommend proceeding, folded into the Mn1 refactor behind the test suite.
+
 ---
 
 ## Reverse-Proxy Deployment
