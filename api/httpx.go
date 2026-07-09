@@ -90,9 +90,6 @@ func (c *Ctx) writeHeader(code int) {
 	c.Writer.WriteHeader(code)
 }
 
-// Status writes a bare status code.
-func (c *Ctx) Status(code int) { c.writeHeader(code) }
-
 // JSON writes obj as a JSON response with the given status code.
 func (c *Ctx) JSON(code int, obj any) {
 	c.Writer.Header().Set("Content-Type", "application/json; charset=utf-8")

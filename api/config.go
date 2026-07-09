@@ -9,7 +9,6 @@ import (
 var bastilleSpec *BastilleSpecStruct
 var configFile = "/usr/local/etc/bastille-api/config.json"
 var cfg *ConfigStruct
-var APIURL string
 var Host string
 var Port string
 

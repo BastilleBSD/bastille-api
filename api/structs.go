@@ -35,8 +35,3 @@ type BastilleCommandStruct struct {
 	Options     []BastilleOptionStruct `json:"options"`
 	Parameters  []string               `json:"parameters"`
 }
-
-type BastilleCommandOutputStruct struct {
-	output string
-	port   string
-}
