@@ -43,45 +43,32 @@ func buildHandler() http.Handler {
 }
 
 func bastilleRoutes() map[string]HandlerFunc {
-	return map[string]HandlerFunc{
+	// Branchy commands with conditional argument grammars remain hand-written
+	// (see bastille.go). Everything else is generated from declarativeCommands.
+	routes := map[string]HandlerFunc{
 		"bootstrap": BastilleBootstrapHandler,
-		"clone":     BastilleCloneHandler,
-		"cmd":       BastilleCmdHandler,
 		"config":    BastilleConfigHandler,
 		"console":   BastilleConsoleHandler,
-		"convert":   BastilleConvertHandler,
-		"cp":        BastilleCpHandler,
-		"create":    BastilleCreateHandler,
-		"destroy":   BastilleDestroyHandler,
-		"edit":      BastilleEditHandler,
 		"etcupdate": BastilleEtcupdateHandler,
-		"export":    BastilleExportHandler,
-		"htop":      BastilleHtopHandler,
-		"import":    BastilleImportHandler,
-		"jcp":       BastilleJcpHandler,
 		"limits":    BastilleLimitsHandler,
-		"list":      BastilleListHandler,
-		"migrate":   BastilleMigrateHandler,
 		"monitor":   BastilleMonitorHandler,
 		"mount":     BastilleMountHandler,
 		"network":   BastilleNetworkHandler,
-		"pkg":       BastillePkgHandler,
-		"rcp":       BastilleRcpHandler,
 		"rdr":       BastilleRdrHandler,
-		"rename":    BastilleRenameHandler,
-		"restart":   BastilleRestartHandler,
-		"service":   BastilleServiceHandler,
 		"setup":     BastilleSetupHandler,
-		"start":     BastilleStartHandler,
-		"stop":      BastilleStopHandler,
-		"sysrc":     BastilleSysrcHandler,
 		"tags":      BastilleTagsHandler,
 		"template":  BastilleTemplateHandler,
-		"top":       BastilleTopHandler,
-		"umount":    BastilleUmountHandler,
-		"update":    BastilleUpdateHandler,
 		"upgrade":   BastilleUpgradeHandler,
-		"verify":    BastilleVerifyHandler,
 		"zfs":       BastilleZfsHandler,
 	}
+
+	for command, spec := range declarativeCommands {
+		if _, exists := routes[command]; exists {
+			// A command must not be defined both ways.
+			panic("bastille command declared twice: " + command)
+		}
+		routes[command] = declarativeHandler(command, spec)
+	}
+
+	return routes
 }
