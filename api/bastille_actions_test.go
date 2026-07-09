@@ -25,6 +25,7 @@ func TestActionBuildArgs(t *testing.T) {
 		{"zfs snapshot without tag", "zfs", "target=j&action=snapshot", []string{"zfs", "j", "snapshot"}},
 		{"zfs get key_value", "zfs", "target=j&action=get&key_value=k%3Dv", []string{"zfs", "j", "get", "k=v"}},
 		{"zfs jail dataset+path", "zfs", "target=j&action=jail&dataset=tank/d&jail_path=/mnt", []string{"zfs", "j", "jail", "tank/d", "/mnt"}},
+		{"zfs unjail uses dataset (Bug2)", "zfs", "target=j&action=unjail&dataset=tank/d", []string{"zfs", "j", "unjail", "tank/d"}},
 		{"zfs options ordering", "zfs", "target=j&action=df&options=-x", []string{"zfs", "-x", "j", "df"}},
 
 		// network
@@ -94,6 +95,7 @@ func TestActionBuildBadRequests(t *testing.T) {
 		{"config", "action=set&property=p", "Missing target parameter"}, // prefix required
 		{"zfs", "target=j&action=bogus", "Invalid action parameter"},
 		{"zfs", "target=j&action=get", "Missing key_value parameter"},
+		{"zfs", "target=j&action=unjail", "Missing dataset parameter"},
 		{"tags", "target=j&action=bogus", "Invalid action parameter"},
 		{"rdr", "target=j&action=log&protocol=tcp&host_port=80&jail_port=8080", "Missing log_options parameter"},
 		{"etcupdate", "target=j", "Missing action parameter"},

@@ -196,7 +196,7 @@ var actionCommands = map[string]actionCommand{
 			"get":      {lit("get"), arg(req("key_value"))},
 			"set":      {lit("set"), arg(req("key_value"))},
 			"jail":     {lit("jail"), arg(req("dataset")), arg(req("jail_path"))},
-			"unjail":   {lit("unjail"), arg(req("jail_path"))},
+			"unjail":   {lit("unjail"), arg(req("dataset"))}, // CLI: unjail pool/dataset
 		},
 	},
 }
