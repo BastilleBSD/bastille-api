@@ -21,8 +21,27 @@ sysrc bastille_api_enable=YES
 service bastille-api start
 ```
 
-Customize the config file to your liking. We recommend only adding API keys
-through the API interface.
+The sample config ships with **no API keys**. On first start (with an empty
+`apiKeys`), the server generates a random **bootstrap key** with full permissions
+and logs it **once** to the service log. Retrieve it right after starting:
+
+```shell
+grep "bootstrap key" /var/log/bastille-api/bastille-api.log
+# Authorization-ID: bootstrap  API key: <64-hex-character secret>
+```
+
+Store that secret somewhere safe — it is never shown again and is not recoverable
+from the config (only a salted hash is stored). Use it to authenticate, then
+create your own keys through the admin API (see below).
+
+> The server **refuses to start** if the old shipped default key
+> (`bastille-api-key`) is present in the config. Remove it and use the bootstrap
+> flow instead.
+
+By default the server binds **loopback only** (`127.0.0.1`). For remote access,
+run it behind a TLS-terminating reverse proxy (recommended) rather than exposing
+the port directly — see `RELEASE_PLAN.md` for proxy configuration. Setting `host`
+to a non-loopback address (or `0.0.0.0`) opts into exposing plain HTTP directly.
 
 Requests made via the API must contain an `Authorization: Bearer API_KEY` header as well
 as an `Authorization-ID: API_KEY_ID` header.
@@ -48,57 +67,64 @@ Any parameter/option string that has spaces should be passed with either
 a `+` or `%20` as the space character. See examples below...
 
 The API supports adding additional keys as well as setting permissions on them. The documentation
-at /swagger/index.html should have all you need to get started. Keys are stored in `api/config.json`
-as the hashed value of the specified key. The initial hash in the sample file comes from the following
-command, `printf "my-random-saltbastille-api-key" | sha256sum`.
+at `/swagger/index.html` should have all you need to get started. Keys are stored in
+`/usr/local/etc/bastille-api/config.json` (written owner-only, mode `0600`) as a **salted hash** of
+the key — never the key itself.
 
-The included default API key is `bastille-api-key` and the key ID is `bastille`. It is configured
-to allow all Bastille permissions as well as all admin permissions.
+The API key structure has a Key ID (an easy-to-remember name) under which are the `salt`, `hash`
+and `permissions`. The Key ID is passed in the `Authorization-ID` header and the actual API key in
+the `Authorization` header. Because only the hash is stored, the API cannot recover your key — keep
+it safe.
 
-The `my-random-salt` above should go in the `salt` json parameter, while the output of the above
-command should go into the `hash` parameter. The actual name of the key (Key ID) can be anything
-you want it to be, but that is the value that goes into the `Authorization-ID` header.
+We recommend creating keys through the admin API (authenticate with the bootstrap key, then call
+`/api/v1/admin/add`) rather than editing the config by hand. If you do add one manually, the hash is
+`sha256(salt + key)`, for example:
 
-The API key structure has a KeyID (easy to remember name), under which are the 
-salt, hash and permissions. The key ID must be passed under the `Authorization-ID` header
-and the actual API key must be passed with the `Authorization` header.The API has no way
-of remembering or storing your actual API key, so keep it safe.
+```shell
+salt="my-random-salt"; key="my-secret-key"
+printf "%s" "${salt}${key}" | sha256sum
+```
 
-You can add keys manually, but we recommend adding them through the API interface.
+Put `salt` in the `salt` field and the digest in the `hash` field for that Key ID.
 
 ## API Examples
 
+The examples below use `https://your-host` — the public name of the reverse
+proxy fronting the API. For direct local access on the same machine, use
+`http://127.0.0.1:8888` instead. Replace `API_KEY`/`keyid` with your own key (or
+`bootstrap` and its secret on a fresh install).
+
 Get supported options and parameters for create
 ```
-curl "http://ip:port/api/v1/bastille/create" \
+curl "https://your-host/api/v1/bastille/create" \
      -H "Authorization: Bearer API_KEY" \
      -H "Authorization-ID: keyid"
 ```
 
 Create a jail
 ```
-curl -X POST "http://ip:port/api/v1/bastille/create?name=test&release=15.0-release&ip=10.0.0.12&iface=vtnet0" \
+curl -X POST "https://your-host/api/v1/bastille/create?name=test&release=15.0-release&ip=10.0.0.12&iface=vtnet0" \
      -H "Authorization: Bearer API_KEY" \
      -H "Authorization-ID: keyid"
 ```
 
 Create a vnet jail with custom gateway and nameserver
 ```
-curl -X POST "http://ip:port/api/v1/bastille/create?name=test&release=15.0-release&ip=10.0.0.12&iface=vtnet0&options=-V+-g+192.168.10.1+-n+192.168.10.1" \
+curl -X POST "https://your-host/api/v1/bastille/create?name=test&release=15.0-release&ip=10.0.0.12&iface=vtnet0&options=-V+-g+192.168.10.1+-n+192.168.10.1" \
      -H "Authorization: Bearer API_KEY" \
      -H "Authorization-ID: keyid"
 ```
 
 Destroy a jail
 ```
-curl -X POST "http://ip:port/api/v1/bastille/destroy?target=test&options=-f+-a+-y" \
+curl -X POST "https://your-host/api/v1/bastille/destroy?target=test&options=-f+-a+-y" \
      -H "Authorization: Bearer API_KEY" \
      -H "Authorization-ID: keyid"
 ```
 
 Run a command inside a jail
 ```
-curl -X POST "http://ip:port/api/v1/bastille/cmd?target=test&command=echo+hi+how%20are%20you" \
+curl -X POST "https://your-host/api/v1/bastille/cmd?target=test&command=echo+hi+how%20are%20you" \
      -H "Authorization: Bearer API_KEY" \
      -H "Authorization-ID: keyid"
 ```
