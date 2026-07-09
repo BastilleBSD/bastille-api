@@ -43,13 +43,12 @@ func buildHandler() http.Handler {
 }
 
 func bastilleRoutes() map[string]HandlerFunc {
-	// Two commands keep bespoke handlers: `mount` (all-or-nothing optional
-	// group) and `limits` (a quirky double-append preserved verbatim). Every
-	// other command is generated from a spec — flat ones from
-	// declarativeCommands, branchy ones from actionCommands.
+	// Only `limits` keeps a bespoke handler: its original list/show path
+	// double-appends the action token (a suspected bug preserved verbatim, not
+	// encoded into the grammar). Every other command is generated from a spec —
+	// flat ones from declarativeCommands, branchy ones from actionCommands.
 	routes := map[string]HandlerFunc{
 		"limits": BastilleLimitsHandler,
-		"mount":  BastilleMountHandler,
 	}
 
 	register := func(command string, handler HandlerFunc) {

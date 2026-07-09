@@ -33,6 +33,8 @@ type paramSpec struct {
 type commandSpec struct {
 	extraArgs []string    // server-controlled flags injected right after options
 	params    []paramSpec // positional parameters, in CLI order
+	group     []paramSpec // all-or-nothing optional group, appended after params
+	groupErr  string      // 400 message when the group is only partially provided
 }
 
 // req/opt are small constructors that keep the command table readable.
@@ -81,6 +83,13 @@ var declarativeCommands = map[string]commandSpec{
 	// options with a server-injected flag (bastille convert always runs -ay)
 	"convert": {extraArgs: []string{"-ay"}, params: []paramSpec{req("target"), opt("release")}},
 
+	// options + required positionals + an all-or-nothing optional fstab group
+	"mount": {
+		params:   []paramSpec{req("target"), req("host_path"), req("jail_path")},
+		group:    []paramSpec{opt("fs_type"), opt("fs_options"), opt("dump"), opt("pass_number")},
+		groupErr: "Missing mount parameter(s)",
+	},
+
 	// flat commands that happen to read differently-named params
 	"bootstrap": {params: []paramSpec{req("url")}},
 	"console":   {params: []paramSpec{req("target"), opt("user")}},
@@ -89,9 +98,9 @@ var declarativeCommands = map[string]commandSpec{
 
 // build constructs the CLI argument vector from the request query. The order
 // mirrors the original hand-written handlers exactly: command, then options,
-// then any injected flags, then positional args. If a required parameter is
-// absent, it returns its name in missingParam and a nil slice.
-func (spec commandSpec) build(command string, q url.Values) (args []string, missingParam string) {
+// then any injected flags, then positional args, then an optional group. On a
+// bad request it returns a nil slice and a human-readable message.
+func (spec commandSpec) build(command string, q url.Values) (args []string, badReq string) {
 	args = []string{command}
 
 	if options := q.Get("options"); options != "" {
@@ -100,17 +109,31 @@ func (spec commandSpec) build(command string, q url.Values) (args []string, miss
 	args = append(args, spec.extraArgs...)
 
 	for _, p := range spec.params {
-		value := q.Get(p.name)
-		if value == "" {
-			if p.required {
-				return nil, p.name
-			}
-			continue
+		var msg string
+		if args, msg = appendParam(args, p, q); msg != "" {
+			return nil, msg
 		}
-		if p.split {
-			args = append(args, strings.Fields(value)...)
-		} else {
-			args = append(args, value)
+	}
+
+	// All-or-nothing optional group: if any member is present, all must be.
+	if len(spec.group) > 0 {
+		present := 0
+		for _, p := range spec.group {
+			if q.Get(p.name) != "" {
+				present++
+			}
+		}
+		if present > 0 {
+			if present != len(spec.group) {
+				msg := spec.groupErr
+				if msg == "" {
+					msg = "Missing required parameter group"
+				}
+				return nil, msg
+			}
+			for _, p := range spec.group {
+				args = append(args, q.Get(p.name))
+			}
 		}
 	}
 
@@ -123,10 +146,10 @@ func declarativeHandler(command string, spec commandSpec) HandlerFunc {
 
 		logRequest("debug", "declarativeHandler:"+command, c, nil, nil)
 
-		cmdArgs, missing := spec.build(command, c.Request.URL.Query())
-		if missing != "" {
-			c.JSON(http.StatusBadRequest, H{"error": "Missing " + missing + " parameter"})
-			logRequest("error", "missing "+missing+" parameter", c, nil, nil)
+		cmdArgs, badReq := spec.build(command, c.Request.URL.Query())
+		if badReq != "" {
+			c.JSON(http.StatusBadRequest, H{"error": badReq})
+			logRequest("error", badReq, c, nil, nil)
 			return
 		}
 

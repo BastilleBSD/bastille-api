@@ -99,31 +99,57 @@ func TestDeclarativeBuildArgs(t *testing.T) {
 	}
 }
 
-// Missing required parameters must be reported (and produce no argv).
-func TestDeclarativeBuildMissingRequired(t *testing.T) {
+// Missing required parameters (and partial optional groups) must be reported
+// with a full message, and produce no argv.
+func TestDeclarativeBuildBadRequest(t *testing.T) {
 	cases := []struct {
-		command     string
-		query       string
-		wantMissing string
+		name    string
+		command string
+		query   string
+		wantMsg string
 	}{
-		{"start", "", "target"},
-		{"create", "name=test&release=15.0-release", "ip"},
-		{"cmd", "target=jail1", "command"},
-		{"clone", "target=jail1&new_name=jail2", "ip"},
+		{"start missing target", "start", "", "Missing target parameter"},
+		{"create missing ip", "create", "name=test&release=15.0-release", "Missing ip parameter"},
+		{"cmd missing command", "cmd", "target=jail1", "Missing command parameter"},
+		{"clone missing ip", "clone", "target=jail1&new_name=jail2", "Missing ip parameter"},
+		{"mount partial group", "mount", "target=j&host_path=/h&jail_path=/j&fs_type=nullfs", "Missing mount parameter(s)"},
 	}
 
 	for _, tc := range cases {
-		t.Run(tc.command+"/"+tc.wantMissing, func(t *testing.T) {
+		t.Run(tc.name, func(t *testing.T) {
 			spec := declarativeCommands[tc.command]
 			q, _ := url.ParseQuery(tc.query)
-			got, missing := spec.build(tc.command, q)
-			if missing != tc.wantMissing {
-				t.Fatalf("missing = %q, want %q", missing, tc.wantMissing)
+			got, badReq := spec.build(tc.command, q)
+			if badReq != tc.wantMsg {
+				t.Fatalf("badReq = %q, want %q", badReq, tc.wantMsg)
 			}
 			if got != nil {
-				t.Fatalf("expected nil argv on missing param, got %v", got)
+				t.Fatalf("expected nil argv on bad request, got %v", got)
 			}
 		})
+	}
+}
+
+// mount's all-or-nothing fstab group: absent group and full group both succeed.
+func TestMountGroup(t *testing.T) {
+	spec := declarativeCommands["mount"]
+
+	q1, _ := url.ParseQuery("target=j&host_path=/h&jail_path=/j")
+	got1, bad1 := spec.build("mount", q1)
+	if bad1 != "" {
+		t.Fatalf("unexpected bad request: %s", bad1)
+	}
+	if want := []string{"mount", "j", "/h", "/j"}; !reflect.DeepEqual(got1, want) {
+		t.Fatalf("mount without group\n got: %v\nwant: %v", got1, want)
+	}
+
+	q2, _ := url.ParseQuery("target=j&host_path=/h&jail_path=/j&fs_type=nullfs&fs_options=ro&dump=0&pass_number=0")
+	got2, bad2 := spec.build("mount", q2)
+	if bad2 != "" {
+		t.Fatalf("unexpected bad request: %s", bad2)
+	}
+	if want := []string{"mount", "j", "/h", "/j", "nullfs", "ro", "0", "0"}; !reflect.DeepEqual(got2, want) {
+		t.Fatalf("mount with full group\n got: %v\nwant: %v", got2, want)
 	}
 }
 
