@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/http"
+	"net/url"
 	"os/exec"
 	"strings"
 	"sync"
@@ -112,62 +113,74 @@ func ParseAndRunBastilleCommand(c *Ctx, cmdArgs []string) {
 // @Router /api/v1/bastille/limits [post]
 func BastilleLimitsHandler(c *Ctx) {
 
-	logRequest("debug", "BastilleLimitsHandler", nil, nil, nil)
+	logRequest("debug", "BastilleLimitsHandler", c, nil, nil)
 
-	cmdArgs := []string{"limits"}
-
-	options := c.Query("options")
-	target := c.Query("target")
-	action := c.Query("action")
-	args := c.Query("args")
-	option := c.Query("option")
-	value := c.Query("value")
-
-	if options != "" {
-		cmdArgs = append(cmdArgs, strings.Fields(options)...)
-	}
-	if target == "" {
-		c.JSON(http.StatusBadRequest, "Missing target parameter")
-		logRequest("error", "missing target parameter", nil, cmdArgs, nil)
+	cmdArgs, badReq := buildLimitsArgs(c.Request.URL.Query())
+	if badReq != "" {
+		c.JSON(http.StatusBadRequest, H{"error": badReq})
+		logRequest("error", badReq, c, nil, nil)
 		return
-	}
-	cmdArgs = append(cmdArgs, target)
-	if action == "" {
-		c.JSON(http.StatusBadRequest, "Missing action parameter")
-		logRequest("error", "missing action parameter", nil, cmdArgs, nil)
-		return
-	}
-	cmdArgs = append(cmdArgs, action)
-
-	switch action {
-	case "add":
-		if option == "" {
-			c.JSON(http.StatusBadRequest, "Missing option parameter")
-			logRequest("error", "missing option parameter", nil, cmdArgs, nil)
-			return
-		}
-		if value == "" {
-			c.JSON(http.StatusBadRequest, "Missing value parameter")
-			logRequest("error", "missing value parameter", nil, cmdArgs, nil)
-			return
-		}
-		cmdArgs = append(cmdArgs, option, value)
-	case "remove":
-		if option == "" {
-			c.JSON(http.StatusBadRequest, "Missing option parameter")
-			logRequest("error", "missing option parameter", nil, cmdArgs, nil)
-			return
-		}
-		cmdArgs = append(cmdArgs, option)
-	case "clear", "reset", "stats":
-		// just append the action
-	case "list", "show":
-		if args == "active" {
-			cmdArgs = append(cmdArgs, action, args)
-		} else {
-			cmdArgs = append(cmdArgs, action)
-		}
 	}
 
 	ParseAndRunBastilleCommand(c, cmdArgs)
+}
+
+// buildLimitsArgs constructs argv for the limits command. limits keeps a bespoke
+// builder because its list/show action takes an optional literal "active" that
+// the flat/action grammars don't model.
+//
+// CLI grammar (bastille limits -h):
+//
+//	TARGET add OPTION VALUE
+//	TARGET remove OPTION
+//	TARGET clear|reset|stats
+//	TARGET list|show [active]
+func buildLimitsArgs(q url.Values) (args []string, badReq string) {
+	args = []string{"limits"}
+
+	if options := q.Get("options"); options != "" {
+		args = append(args, strings.Fields(options)...)
+	}
+
+	target := q.Get("target")
+	if target == "" {
+		return nil, "Missing target parameter"
+	}
+	args = append(args, target)
+
+	action := q.Get("action")
+	if action == "" {
+		return nil, "Missing action parameter"
+	}
+	args = append(args, action)
+
+	switch action {
+	case "add":
+		option := q.Get("option")
+		value := q.Get("value")
+		if option == "" {
+			return nil, "Missing option parameter"
+		}
+		if value == "" {
+			return nil, "Missing value parameter"
+		}
+		args = append(args, option, value)
+	case "remove":
+		option := q.Get("option")
+		if option == "" {
+			return nil, "Missing option parameter"
+		}
+		args = append(args, option)
+	case "clear", "reset", "stats":
+		// action already appended; nothing more
+	case "list", "show":
+		// The action token is already appended above. Previously this branch
+		// re-appended it (producing "list list [active]"), which does not match
+		// the CLI grammar. Only the optional literal "active" belongs here.
+		if q.Get("args") == "active" {
+			args = append(args, "active")
+		}
+	}
+
+	return args, ""
 }

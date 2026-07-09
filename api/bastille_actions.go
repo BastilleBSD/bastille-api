@@ -10,10 +10,9 @@ package api
 // keyword, a parameter, or the action value itself. Unmatched actions fall to
 // defaultBranch, or produce 400 when there is none.
 //
-// Two commands remain hand-written in bastille.go: `mount` (an all-or-nothing
-// optional parameter group) and `limits` (whose original list/show handling
-// appends the action token twice — a suspected bug preserved verbatim rather
-// than encoded into this grammar; see AUDIT follow-ups).
+// One command remains hand-written in bastille.go: `limits`, whose list/show
+// action takes an optional literal "active" that this grammar doesn't model.
+// (`mount`'s all-or-nothing group is handled by the flat commandSpec.)
 
 import (
 	"net/http"

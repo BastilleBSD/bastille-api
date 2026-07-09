@@ -45,10 +45,10 @@ func buildHandler() http.Handler {
 }
 
 func bastilleRoutes() map[string]HandlerFunc {
-	// Only `limits` keeps a bespoke handler: its original list/show path
-	// double-appends the action token (a suspected bug preserved verbatim, not
-	// encoded into the grammar). Every other command is generated from a spec —
-	// flat ones from declarativeCommands, branchy ones from actionCommands.
+	// Only `limits` keeps a bespoke handler: its list/show action takes an
+	// optional literal "active" that the flat/action grammars don't model. Every
+	// other command is generated from a spec — flat ones from declarativeCommands,
+	// branchy ones from actionCommands.
 	routes := map[string]HandlerFunc{
 		"limits": BastilleLimitsHandler,
 	}
