@@ -112,6 +112,56 @@ unauthenticated shell, and (d) does not write secrets to logs or world-readable 
   fixed `7681`.
 - **Streaming (E3).** Consider streaming command output instead of buffering with `CombinedOutput`.
 
+### Decision note — drop the Gin dependency in favor of the standard library
+
+**Recommendation: migrate the HTTP layer to `net/http` from the standard library, folded into the
+schema-driven handler refactor above (not as standalone churn).** Feasible, low-risk once the Phase 1
+test suite exists, and it directly improves maintainability, security, and packaging.
+
+**The data.** The module pulls **152 packages** into its build graph, and **all four direct
+dependencies are Gin or Gin-Swagger**. The heavyweight transitive deps all trace back to Gin:
+
+- `bytedance/sonic` — a JSON encoder using hand-written **assembly and `unsafe`** (Gin's default renderer)
+- `quic-go/quic-go` — a full **HTTP/3 / QUIC** stack that a localhost-fronted CLI wrapper will never use
+- `go-playground/validator/v10` — Gin's struct-binding validator, unused here
+
+For a **root-privileged FreeBSD daemon**, that tree is the single biggest dependency liability:
+attack surface, CVE-tracking burden, and vendoring pain for a FreeBSD ports maintainer.
+
+**How much of Gin is actually used.** A thin slice: route groups + a wildcard param, a middleware
+chain (`Use`/`Next`/`Abort`), and helpers (`c.Query`, `c.GetHeader`, `c.JSON`, `c.String`,
+`c.ClientIP`, `c.FullPath`). Notably, the one non-trivial feature — the ttyd reverse proxy — **already
+uses stdlib `net/http/httputil`**, not Gin.
+
+**Why stdlib is sufficient on Go 1.25.** `net/http.ServeMux` now covers the routing natively:
+method-aware patterns (`POST /api/v1/bastille/{cmd}`), path wildcards (`/{path...}`), and
+`r.PathValue` / `r.Pattern`. The remaining gaps are a ~100-line helper file:
+
+- `c.JSON` → `json.NewEncoder(w).Encode` + content-type header
+- middleware → the standard `func(http.Handler) http.Handler` pattern
+- `c.ClientIP` → explicit parse of `RemoteAddr` / a **trusted** `X-Forwarded-For` (safer than Gin's,
+  since behind a known reverse proxy you know exactly which header to trust — Gin's ClientIP has had
+  trust-config CVEs)
+- add explicit `http.Server` timeouts and `http.MaxBytesReader` — needed for Phase 1 (M4) regardless
+
+**Swagger** is the only real coupling: swap `gin-swagger` → `swaggo/http-swagger` (or serve the static
+`docs/swagger.json`). The `swag` annotations and generated spec are framework-agnostic and stay.
+
+**Why it fits this project.** Maintainer turnover is a stated reality; stdlib `net/http` is under the
+Go 1 compatibility promise (zero churn, no framework to learn), whereas Gin + sonic + quic-go each
+move independently and generate ongoing upgrade toil. Dropping `unsafe`/assembly JSON and a QUIC stack
+from a root daemon is a clean security win, and a near-zero-dependency binary is far easier to ship as
+a FreeBSD package/port.
+
+**Cost & sequencing.** The rewrite touches every handler — which is *also* true of the schema-driven
+refactor (Mn1) — so do them together, **after** the Phase 1/Phase 2 test suite exists, so the swap is
+regression-guarded end-to-end. The Phase 0 tests already exercise the auth/console/logging seams the
+migration must preserve. Rough effort: 1–2 focused days including test updates.
+
+**Fallback.** If the team wants router ergonomics without Gin's weight, `go-chi/chi` is
+`http.Handler`-native, tiny, and has no heavy transitive deps. Given Go 1.25's ServeMux, prefer pure
+stdlib and add chi only if sub-router sugar is later missed.
+
 ---
 
 ## Reverse-Proxy Deployment
