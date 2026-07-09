@@ -112,6 +112,40 @@ unauthenticated shell, and (d) does not write secrets to logs or world-readable 
   fixed `7681`.
 - **Streaming (E3).** Consider streaming command output instead of buffering with `CombinedOutput`.
 
+### Prototype results — Mn1 schema-driven handlers (measured, branch `refactor/drop-gin`)
+
+A working proof-of-concept of the schema-driven refactor was built on top of the drop-gin branch.
+Outcome:
+
+| Metric | Before | After | Change |
+|--------|--------|-------|--------|
+| `api/bastille.go` | 1,905 lines | 897 lines | **−1,008** |
+| Commands as data | 0 | 25 of 39 | table-driven |
+| Hand-written handlers | 39 | 14 | branchy only |
+
+- **What it replaced:** 25 near-identical handlers (each ~30 lines of read-query / check-empty /
+  append-arg / error) became one-line entries in a `declarativeCommands` table driven by a single
+  generic handler. New file `api/bastille_declarative.go` (~130 lines) holds the `paramSpec` /
+  `commandSpec` types, the table, a pure `build()` argument constructor, and the handler.
+- **What the table expresses:** required vs optional-trailing positionals, whitespace-split args
+  (`cmd`/`pkg`/`sysrc`/`service`), reordered positionals (`rcp`), and server-injected flags
+  (`convert -ay`). Adding a command of this shape is now a one-line data change.
+- **The boundary (honest scope):** the 14 branchy commands — `config`, `zfs`, `limits`, `rdr`,
+  `monitor`, `network`, `tags`, `template`, `etcupdate`, `upgrade`, `setup`, `mount`, `bootstrap`,
+  `console` — have conditional (action-dependent) grammars a flat table cannot express, and remain
+  hand-written. Folding them in requires extending the schema with a small **action grammar**
+  (in progress).
+- **Bonus:** the generic handler unifies error responses on `{"error": ...}`, chipping away at the
+  B1 inconsistency for free.
+- **Verified:** `go build` + `go vet` clean; a table test asserts byte-identical argv for every
+  command shape plus missing-required detection and a 39-route completeness/no-duplicate check; a
+  live smoke test confirmed a declarative route serves its spec (200), enforces required params
+  (400), and requires auth (401).
+
+**Conclusion:** the schema-driven approach is confirmed for the ~25 flat commands (over half of
+`bastille.go` eliminated). Completing Mn1 means adding the action grammar so the remaining branchy
+commands collapse too.
+
 ### Decision note — drop the Gin dependency in favor of the standard library
 
 **Recommendation: migrate the HTTP layer to `net/http` from the standard library, folded into the
