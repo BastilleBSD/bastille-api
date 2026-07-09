@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"os"
+	"path/filepath"
 )
 
 var bastilleSpec *BastilleSpecStruct
@@ -69,9 +70,22 @@ func saveConfig() error {
 		return err
 	}
 
-	err = os.WriteFile(configFile, data, 0644)
+	// The config holds API key salts and hashes. Keep the directory and file
+	// readable only by the owner (0700/0600) to prevent local offline attacks.
+	if err := os.MkdirAll(filepath.Dir(configFile), 0700); err != nil {
+		logRequest("error", "Failed to create config directory", nil, nil, err.Error())
+		return err
+	}
+
+	err = os.WriteFile(configFile, data, 0600)
 	if err != nil {
 		logRequest("error", "Failed to write config file", nil, nil, err.Error())
+		return err
+	}
+
+	// Tighten permissions even if the file already existed with a looser mode.
+	if err := os.Chmod(configFile, 0600); err != nil {
+		logRequest("error", "Failed to set config file permissions", nil, nil, err.Error())
 		return err
 	}
 
