@@ -114,37 +114,43 @@ unauthenticated shell, and (d) does not write secrets to logs or world-readable 
 
 ### Prototype results — Mn1 schema-driven handlers (measured, branch `refactor/drop-gin`)
 
-A working proof-of-concept of the schema-driven refactor was built on top of the drop-gin branch.
+A working proof-of-concept of the schema-driven refactor was built on top of the drop-gin branch,
+in two stages: a flat table for simple commands, then an action grammar for the branchy ones.
 Outcome:
 
 | Metric | Before | After | Change |
 |--------|--------|-------|--------|
-| `api/bastille.go` | 1,905 lines | 897 lines | **−1,008** |
-| Commands as data | 0 | 25 of 39 | table-driven |
-| Hand-written handlers | 39 | 14 | branchy only |
+| `api/bastille.go` | 1,905 lines | 239 lines | **−1,666 (~87%)** |
+| Commands as data | 0 | 37 of 39 | table-driven |
+| Hand-written handlers | 39 | 2 | `limits`, `mount` only |
 
-- **What it replaced:** 25 near-identical handlers (each ~30 lines of read-query / check-empty /
-  append-arg / error) became one-line entries in a `declarativeCommands` table driven by a single
-  generic handler. New file `api/bastille_declarative.go` (~130 lines) holds the `paramSpec` /
-  `commandSpec` types, the table, a pure `build()` argument constructor, and the handler.
-- **What the table expresses:** required vs optional-trailing positionals, whitespace-split args
-  (`cmd`/`pkg`/`sysrc`/`service`), reordered positionals (`rcp`), and server-injected flags
-  (`convert -ay`). Adding a command of this shape is now a one-line data change.
-- **The boundary (honest scope):** the 14 branchy commands — `config`, `zfs`, `limits`, `rdr`,
-  `monitor`, `network`, `tags`, `template`, `etcupdate`, `upgrade`, `setup`, `mount`, `bootstrap`,
-  `console` — have conditional (action-dependent) grammars a flat table cannot express, and remain
-  hand-written. Folding them in requires extending the schema with a small **action grammar**
-  (in progress).
-- **Bonus:** the generic handler unifies error responses on `{"error": ...}`, chipping away at the
+- **Stage 1 — flat table (25 commands):** near-identical handlers (each ~30 lines of read-query /
+  check-empty / append-arg / error) became one-line entries in a `declarativeCommands` table driven
+  by a single generic handler (`api/bastille_declarative.go`). Expresses required vs
+  optional-trailing positionals, whitespace-split args (`cmd`/`pkg`/`sysrc`/`service`), reordered
+  positionals (`rcp`), and server-injected flags (`convert -ay`).
+- **Stage 2 — action grammar (12 more commands):** an `actionCommands` table
+  (`api/bastille_actions.go`) describes commands whose argv depends on an action value — prefix
+  params, then a per-action ordered sequence of literal / parameter / action-value items, with a
+  default branch (or 400 on an unmatched action). Absorbs `config`, `etcupdate`, `monitor`,
+  `network`, `rdr`, `tags`, `template`, `upgrade`, `zfs`, plus the three flat-but-oddly-named
+  commands (`bootstrap`, `console`, `setup`).
+- **What stays hand-written (2):** `mount` (an all-or-nothing optional parameter group) and `limits`
+  (whose original `list`/`show` path **appends the action token twice** — a suspected bug preserved
+  verbatim rather than encoded into the clean grammar; flagged for a separate fix).
+- **Bonus:** the generic handlers unify error responses on `{"error": ...}`, largely resolving the
   B1 inconsistency for free.
-- **Verified:** `go build` + `go vet` clean; a table test asserts byte-identical argv for every
-  command shape plus missing-required detection and a 39-route completeness/no-duplicate check; a
-  live smoke test confirmed a declarative route serves its spec (200), enforces required params
-  (400), and requires auth (401).
+- **Verified:** `go build` + `go vet` clean; table tests assert **byte-identical argv** against the
+  original handlers for every command shape and every action branch (options ordering, optionals,
+  split args, default branches, action-value emission) plus bad-request handling and a
+  39-route completeness/no-duplicate check — 76 test cases. Live smoke tests confirm flat and action
+  routes serve specs (200), enforce required params/actions (400), and require auth (401).
 
-**Conclusion:** the schema-driven approach is confirmed for the ~25 flat commands (over half of
-`bastille.go` eliminated). Completing Mn1 means adding the action grammar so the remaining branchy
-commands collapse too.
+**Conclusion:** the schema-driven approach is confirmed end-to-end: 37 of 39 commands are now data,
+and `api/bastille.go` shrank ~87%. Adding a command is a table entry. Remaining follow-ups: a
+grouped-optional feature would absorb `mount`; `limits` should stay hand-written until its
+double-append bug is investigated; and the Swagger annotations (which lived on the deleted handlers)
+should be regenerated from the schema so `/swagger` stays in sync.
 
 ### Decision note — drop the Gin dependency in favor of the standard library
 
