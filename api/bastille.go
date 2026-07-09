@@ -270,7 +270,9 @@ func BastilleConfigHandler(c *gin.Context) {
 	}
 	cmdArgs = append(cmdArgs, property)
 
-	if value != "" {
+	// CLI grammar: set|add PROPERTY [VALUE]; get|remove PROPERTY (no value).
+	// Only append a value for the actions that accept one.
+	if value != "" && (action == "set" || action == "add") {
 		cmdArgs = append(cmdArgs, value)
 	}
 
@@ -1084,6 +1086,12 @@ func BastilleNetworkHandler(c *gin.Context) {
 			return
 		}
 		cmdArgs = append(cmdArgs, action, iface)
+	} else {
+		// CLI has only add/remove forms; an empty or unknown action would
+		// otherwise fall through to an incomplete "network TARGET".
+		c.JSON(http.StatusBadRequest, "Invalid action parameter")
+		logRequest("error", "invalid action parameter", nil, cmdArgs, nil)
+		return
 	}
 
 	ParseAndRunBastilleCommand(c, cmdArgs)

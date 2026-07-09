@@ -225,12 +225,12 @@ Other items:
   `jail` case correctly uses `dataset`). A caller sending `dataset=...` as documented got
   "Missing jail_path parameter", so the endpoint was unusable as intended. **Fixed:** `unjail` now
   reads `dataset`. Note this is an API-facing parameter change for that one action.
-- **Minor (over-permissive input, not fixed) —** two handlers accept input the CLI grammar does not
-  use, which can produce a malformed command only when the caller supplies the extra field:
-  `config` appends a `value` for the `get`/`remove` actions (CLI: `get|remove PROPERTY`, no value);
-  and `zfs`/`network` fall through to an incomplete command on an empty/unknown `action` (returning a
-  500 from the failed CLI invocation rather than a 400). Both are validation-hardening opportunities,
-  not default-path breakage.
+- **Over-permissive input (fixed) —** two handlers accepted input the CLI grammar does not use,
+  which produced a malformed command only when the caller supplied the extra field. `config` appended
+  a `value` for the `get`/`remove` actions (CLI: `get|remove PROPERTY`, no value) — now the value is
+  only appended for `set`/`add`. `network` fell through to an incomplete `network TARGET` on an
+  empty/unknown `action` (a 500 from the failed CLI call) — now it returns a 400. (`zfs` already
+  rejected unknown actions via its `default` case, so it was not affected.)
 
 ---
 
