@@ -11,6 +11,29 @@ import (
 
 var logger *slog.Logger
 
+// sensitiveHeaders are stripped from any logged request headers. Values here are
+// in Go's canonical MIME header form (http.Header.Del canonicalizes its
+// argument, but we keep these canonical for clarity).
+var sensitiveHeaders = []string{
+	"Authorization",
+	"Authorization-Id",
+	"X-Api-Key",
+	"X-Api-Key-Id",
+}
+
+// redactHeaders returns a copy of h with all sensitive headers removed, so that
+// API secrets are never written to logs (even in debug mode).
+func redactHeaders(h http.Header) http.Header {
+	clone := h.Clone()
+	if clone == nil {
+		return http.Header{}
+	}
+	for _, name := range sensitiveHeaders {
+		clone.Del(name)
+	}
+	return clone
+}
+
 func InitLogger(debug bool) {
 
 	var level slog.Level
@@ -37,11 +60,12 @@ func logRequest(level string, msg string, c *gin.Context, cmdArgs any, err any) 
 	switch level {
 	case "info":
 		if c != nil {
-			// Original simple format when context is available
+			// Method + path only. The raw query string is intentionally NOT
+			// logged: request parameters can contain sensitive values (targets,
+			// paths, cmd payloads) and would otherwise land in always-on logs.
 			logger.Info(msg,
 				"method", c.Request.Method,
 				"path", c.Request.URL.Path,
-				"query", c.Request.URL.RawQuery,
 			)
 		} else {
 			// Message only
@@ -51,8 +75,7 @@ func logRequest(level string, msg string, c *gin.Context, cmdArgs any, err any) 
 	case "debug":
 		var attrs []any
 		if c != nil {
-			headers := c.Request.Header.Clone()
-			headers.Del("Authorization")
+			headers := redactHeaders(c.Request.Header)
 			attrs = append(attrs,
 				"method", c.Request.Method,
 				"path", c.Request.URL.Path,
@@ -115,7 +138,7 @@ func apiKeyMiddleware(scope string, action string) gin.HandlerFunc {
 		const prefix = "Bearer "
 
 		if key == "" || !strings.HasPrefix(key, prefix) {
-			logRequest("error", "missin Authorization header", c, nil, nil)
+			logRequest("error", "missing Authorization header", c, nil, nil)
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"error": "Unauthorized",
 			})
